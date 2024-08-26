@@ -10,11 +10,12 @@ export class UsersService {
 
   constructor (
     @Inject(constants.userRepository)
-    private userRepository: Repository <User>,
+    private userRepository: Repository <User>
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto): Promise <User> {
+    const user = await this.userRepository.create(createUserDto)
+    return this.userRepository.save(user)
   }
 
   async findAll(): Promise<User[]> {
@@ -27,8 +28,12 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.preload({
+      id: id,
+      ...updateUserDto
+    })
+    if (!user) throw new NotFoundException(`No existe ningun usuario con el id: ${id}`)
   }
 
   remove(id: number) {

@@ -6,25 +6,13 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({length: 255})
-    title: string;
+    @Column('varchar', {length: 255})
+    name: string;
 
-    @Column('text')
-    description: string;
+    @Column('varchar', {length: 255})
+    email: string;
 
-    @Column('int')
-    duration: number;
-
-    @Column({length: 255})
-    platform: string;
-
-    @Column('float')
-    rating: number;
-
-    @Column({length: 255})
-    category: string;
-
-    @Column('decimal')
-    price: number;
+    @Column('date')
+    birthdate: Date;
 
 }
