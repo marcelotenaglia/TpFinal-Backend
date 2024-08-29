@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
+@Module({
+  imports: [CoursesModule, CourseTopicsModule, TopicsModule, CompanyModule, CourseMediaModule, BuyCoursesModule],
 import { BillModule } from './bill/bill.module';
 import { UsersModule } from './users/users.module';
 import { UserMediaModule } from './user_media/user_media.module';
