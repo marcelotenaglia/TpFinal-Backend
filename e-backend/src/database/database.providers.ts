@@ -5,7 +5,7 @@ import { constants } from "src/constants/constants";
 export const databaseProviders = [
     {
         // El proveedor se identifica por la cadena 'DATA_SOURCE'
-        provide: constants.datasource,
+        provide: constants.dataSource,
 
         // Define una fábrica asíncrona que crea e inicializa un objeto DataSource
         useFactory: async () => {
@@ -15,8 +15,8 @@ export const databaseProviders = [
                 host: 'localhost',            // Dirección del host de la base de datos
                 port: 3306,                   // Puerto en el que se ejecuta la base de datos
                 username: 'root',             // Nombre de usuario para acceder a la base de datos
-                password: 'root',             // Contraseña para acceder a la base de datos
-                database: 'eintein',     // Nombre de la base de datos a la que se conectará
+                password: 'Aguantechimango23',             // Contraseña para acceder a la base de datos
+                database: 'einstein',     // Nombre de la base de datos a la que se conectará
                 entities: [
                     __dirname + '/../**/*.entity{.ts,.js}', // Ruta donde se encuentran las entidades
                 ],
