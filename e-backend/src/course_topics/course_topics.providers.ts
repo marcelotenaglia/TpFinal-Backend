@@ -8,6 +8,6 @@ export const courseTopicsRepository = [
 
     useFactory:(dataSource: DataSource) => dataSource.getRepository(CourseTopic),
 
-    Inject: [constants.datasource]
+    Inject: [constants.dataSource]
 },
 ];
