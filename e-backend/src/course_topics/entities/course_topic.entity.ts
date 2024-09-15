@@ -13,9 +13,9 @@ export class CourseTopic {
     topic_id:number;
     
 
-   /* @ManyToOne(() => Course, (course) => course.courseTopic,{ primary:true})
+    @ManyToOne(() => Course, (course) => course.courseTopics)
     course : Course;
 
-    @ManyToOne(() => Topic, (topic) => topic.courseTopic, { primary:true})
-    topic: Topic;*/
+    @ManyToOne(() => Topic, (topic) => topic.courseTopics)
+    topic: Topic;
 }

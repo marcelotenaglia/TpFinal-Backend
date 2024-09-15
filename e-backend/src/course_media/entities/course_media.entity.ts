@@ -8,7 +8,7 @@ export class CourseMedia {
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column({type: 'blob'})
+    @Column()
     image: Buffer;
     
     @OneToOne(() => Course)

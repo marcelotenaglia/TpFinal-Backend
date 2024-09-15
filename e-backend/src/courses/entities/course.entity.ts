@@ -1,6 +1,9 @@
-import { Entity,Column,PrimaryGeneratedColumn,OneToMany,OneToOne } from "typeorm";
+import { Entity,Column,PrimaryGeneratedColumn,OneToMany,OneToOne, ManyToOne, JoinColumn } from "typeorm";
 import { Class } from "src/classes/entities/class.entity";
 import { CourseMedia } from "src/course_media/entities/course_media.entity";
+import { User } from "src/users/entities/user.entity";
+import { Favorite } from "src/favorites/entities/favorite.entity";
+import { CourseTopic } from "src/course_topics/entities/course_topic.entity";
 
 @Entity('courses')
 export class Course {
@@ -38,6 +41,16 @@ export class Course {
     @OneToOne(() => CourseMedia, (courseMedia) => courseMedia.course,{ eager: true })
     media: CourseMedia;
 
-    //falta agregar el usuario y la relacion
+
+    @ManyToOne(() => User, (user) => user.courses, { nullable: false })
+    @JoinColumn({name: 'instructor_id'})
+    instructor: User;
+ 
+
+    @OneToMany(() => Favorite, (favorite) => favorite.course)
+    favorites: Favorite[];
+
+    @OneToMany(() => CourseTopic, (courseTopic) => courseTopic.course)
+    courseTopics: CourseTopic[];
 
 }
