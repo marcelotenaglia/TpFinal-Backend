@@ -1,5 +1,5 @@
 export const constants = {
-    datasource: 'DATA_SOURCE',
+    dataSource: 'DATA_SOURCE',
     userRepository: 'USER_REPOSITORY',
     classesRepository: 'CLASSES_REPOSITORY',
     companyRepository:'COMPANY_REPOSITORY',
