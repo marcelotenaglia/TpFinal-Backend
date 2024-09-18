@@ -2,7 +2,7 @@ import { DataSource } from "typeorm";
 import { Topic } from "./entities/topic.entity";
 import { constants } from "src/constants/constants";
 
-export const topicRepository = [
+export const topicProviders = [
 {
     provide: constants.topicsRepository,
 

@@ -11,7 +11,7 @@ import { rolesProviders } from './roles.providers';
     DatabaseModule,
     UsersModule,
   ],
-  controllers: [RolesController],
+  controllers: [RolesController], 
 
   providers: [
     ...rolesProviders,

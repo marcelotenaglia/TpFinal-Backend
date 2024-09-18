@@ -9,6 +9,9 @@ export const constants = {
     topicsRepository: 'TOPICS_REPOSITORY',
     userMediaRepository: 'USER_MEDIA_REPOSITORY',
     rolesRepository: 'ROLES_REPOSITORY',
+    favoritesRepository: 'FAVORITES_REPOSITORY',
+    ratingRepository: 'RATING_REPOSITORY',
+    categoriesRepository: 'CATEGORIES_REPOSITORY',
 
 
 };
