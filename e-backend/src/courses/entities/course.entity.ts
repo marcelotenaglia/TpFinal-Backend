@@ -22,12 +22,6 @@ export class Course {
     @Column({type:'varchar',length:100})
     platform: string;
 
-    @Column({type: 'float'})
-    rating: number;
-
-    @Column({type:'varchar',length:50})
-    category:string;
-
     @Column({type:'decimal', precision:4,scale:2})
     price:number;
 
