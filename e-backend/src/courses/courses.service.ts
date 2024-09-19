@@ -28,14 +28,21 @@ constructor(
   }
 
   async findAll():Promise<Course[]> {
+    // const courses = await this.courseRepository.createQueryBuilder('course')
+    // .leftJoinAndSelect('course.instructor', 'instructor')
+    // .leftJoinAndSelect('course.category', 'category')
+    // .leftJoinAndSelect('course.courseTopics','courseTopics')
+    // .leftJoinAndSelect('courseTopics.topic', 'topic') 
+    // .getMany();
     const courses = await this.courseRepository.createQueryBuilder('course')
     .leftJoinAndSelect('course.instructor', 'instructor')
     .leftJoinAndSelect('course.category', 'category')
-    .leftJoinAndSelect('course.courseTopics','courseTopics')
-    .leftJoinAndSelect('courseTopics.topic', 'topic') 
+    .leftJoinAndSelect('course.courseTopics', 'courseTopics')
+    .leftJoinAndSelect('courseTopics.topic', 'topic')
     .getMany();
+
     //const courses = await this.courseRepository.find({relations: ['instructor']});
-    if(!courses.length) throw new NotFoundException("No hay cursos");
+    // if(!courses.length) throw new NotFoundException("No hay cursos");
    return courses;
   }
 

@@ -15,6 +15,7 @@ import { courseTopicsProviders } from 'src/course_topics/course_topics.providers
 import { CategoriesModule } from 'src/categories/categories.module';
 import { categoriesProviders } from 'src/categories/categories.providers';
 import { coursesProviders } from './courses.providers';
+import { topicProviders } from 'src/topics/topics.providers';
 
 
 
@@ -30,6 +31,7 @@ imports:[
 ],
 
   controllers: [CoursesController],
+
   providers: [
     ...classesProviders,
     ...courseMediaProviders,
@@ -38,7 +40,9 @@ imports:[
     ...courseTopicsProviders,
     ...categoriesProviders,
     ...coursesProviders,
+    ...topicProviders,
     CoursesService],
+
     exports:[...coursesProviders]
 })
 export class CoursesModule {}
