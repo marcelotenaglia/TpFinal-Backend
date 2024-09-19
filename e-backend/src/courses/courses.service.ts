@@ -39,6 +39,7 @@ constructor(
     .leftJoinAndSelect('course.category', 'category')
     .leftJoinAndSelect('course.courseTopics', 'courseTopics')
     .leftJoinAndSelect('courseTopics.topic', 'topic')
+    .leftJoinAndSelect('course.classes', 'classes')
     .getMany();
 
     //const courses = await this.courseRepository.find({relations: ['instructor']});
