@@ -4,12 +4,15 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { constants } from 'src/constants/constants';
 import { Repository } from 'typeorm';
 import { Role } from './entities/role.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class RolesService {
   constructor(
     @Inject(constants.rolesRepository)
     private rolesRepository: Repository<Role>,
+    @Inject(constants.userRepository)
+    private userRepository: Repository<User>
   ){}
 
 

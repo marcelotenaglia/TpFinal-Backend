@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef,Module } from '@nestjs/common';
 import { ClassesService } from './classes.service';
 import { ClassesController } from './classes.controller';
 import { DatabaseModule } from 'src/database/database.modele';
@@ -8,7 +8,7 @@ import { coursesProviders } from 'src/courses/courses.providers';
 @Module({
   imports: [
     DatabaseModule,
-    CoursesModule,
+    forwardRef(() =>  CoursesModule),
   ],
 
   controllers: [ClassesController],

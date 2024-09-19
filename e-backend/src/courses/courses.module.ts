@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef,Module } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CoursesController } from './courses.controller';
 import { DatabaseModule } from 'src/database/database.modele';
@@ -14,16 +14,19 @@ import { favoritesProviders } from 'src/favorites/favorites.providers';
 import { courseTopicsProviders } from 'src/course_topics/course_topics.providers';
 import { CategoriesModule } from 'src/categories/categories.module';
 import { categoriesProviders } from 'src/categories/categories.providers';
+import { coursesProviders } from './courses.providers';
+
+
 
 @Module({
 imports:[
   DatabaseModule,
-  ClassesModule,
-  CourseMediaModule,
-  UsersModule,
-  FavoritesModule,
-  CourseTopicsModule,
-  CategoriesModule,
+  forwardRef(() =>  ClassesModule),
+  forwardRef(() =>  CourseMediaModule),
+  forwardRef(() =>  UsersModule),
+  forwardRef(() =>  FavoritesModule),
+  forwardRef(() =>  CourseTopicsModule),
+  forwardRef(() =>  CategoriesModule),
 ],
 
   controllers: [CoursesController],
@@ -34,6 +37,8 @@ imports:[
     ...favoritesProviders,
     ...courseTopicsProviders,
     ...categoriesProviders,
+    ...coursesProviders,
     CoursesService],
+    exports:[...coursesProviders]
 })
 export class CoursesModule {}

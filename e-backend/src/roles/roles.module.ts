@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef,Module } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { RolesController } from './roles.controller';
 import { DatabaseModule } from 'src/database/database.modele';
@@ -9,10 +9,10 @@ import { rolesProviders } from './roles.providers';
 @Module({
   imports: [
     DatabaseModule,
-    UsersModule,
+    forwardRef(() => UsersModule),
   ],
   controllers: [RolesController], 
-
+ 
   providers: [
     ...rolesProviders,
     ...userProviders,
