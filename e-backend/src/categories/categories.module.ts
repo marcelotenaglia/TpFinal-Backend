@@ -1,19 +1,20 @@
-import { forwardRef,Module } from '@nestjs/common';
-import { CourseMediaService } from './course_media.service';
-import { CourseMediaController } from './course_media.controller';
+import {forwardRef, Module } from '@nestjs/common';
+import { CategoriesService } from './categories.service';
+import { CategoriesController } from './categories.controller';
 import { DatabaseModule } from 'src/database/database.modele';
 import { CoursesModule } from 'src/courses/courses.module';
 import { coursesProviders } from 'src/courses/courses.providers';
 
 @Module({
-  imports:[
+
+  imports: [
     DatabaseModule,
     forwardRef(() =>  CoursesModule),
   ],
-  
-  controllers: [CourseMediaController],
+
+  controllers: [CategoriesController],
   providers: [
     ...coursesProviders,
-    CourseMediaService],
+    CategoriesService],
 })
-export class CourseMediaModule {}
+export class CategoriesModule {}

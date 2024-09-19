@@ -2,12 +2,14 @@ import { DataSource } from "typeorm";
 import { Topic } from "./entities/topic.entity";
 import { constants } from "src/constants/constants";
 
-export const topicRepository = [
+export const topicProviders = [
 {
     provide: constants.topicsRepository,
 
     useFactory:(dataSource: DataSource) => dataSource.getRepository(Topic),
 
-    Inject: [constants.dataSource]
+
+    inject: [constants.dataSource]
+
 },
 ];

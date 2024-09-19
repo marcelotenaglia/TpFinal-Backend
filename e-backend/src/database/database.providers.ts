@@ -14,13 +14,13 @@ export const databaseProviders = [
                 type: 'mysql',                // Tipo de base de datos (MySQL)
                 host: 'localhost',            // Dirección del host de la base de datos
                 port: 3306,                   // Puerto en el que se ejecuta la base de datos
-                username: 'root',             // Nombre de usuario para acceder a la base de datos
-                password: 'Aguantechimango23',             // Contraseña para acceder a la base de datos
+                username: 'admin',             // Nombre de usuario para acceder a la base de datos
+                password: 'admin',             // Contraseña para acceder a la base de datos
                 database: 'einstein',     // Nombre de la base de datos a la que se conectará
                 entities: [
                     __dirname + '/../**/*.entity{.ts,.js}', // Ruta donde se encuentran las entidades
                 ],
-                synchronize: true,            // Sincroniza la base de datos con el esquema de las entidades en cada ejecución (útil solo en desarrollo)
+                synchronize: false,            // Sincroniza la base de datos con el esquema de las entidades en cada ejecución (útil solo en desarrollo)
             });
  
             // Inicializa la conexión al DataSource y devuelve la instancia inicializada

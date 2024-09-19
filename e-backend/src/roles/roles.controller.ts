@@ -8,12 +8,12 @@ export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
-  create(@Body() createRoleDto: CreateRoleDto) {
+  async create(@Body() createRoleDto: CreateRoleDto) {
     return this.rolesService.create(createRoleDto);
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.rolesService.findAll();
   }
 

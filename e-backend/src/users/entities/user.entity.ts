@@ -1,4 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Course } from "src/courses/entities/course.entity";
+import { Favorite } from "src/favorites/entities/favorite.entity";
+import { Rating } from "src/rating/entities/rating.entity";
+import { Role } from "src/roles/entities/role.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity ('users')
 export class User {
@@ -9,10 +13,23 @@ export class User {
     @Column('varchar', {length: 255})
     name: string;
 
-    @Column('varchar', {length: 255})
+    @Column({ unique: true, length: 255 })
     email: string;
 
-    @Column('date')
+    @Column({ type: 'date' })
     birthdate: Date;
+    
+    @ManyToOne(() => Role, (role) => role.users)
+    @JoinColumn({name: 'role_id'})
+    role: Role;
+
+    @OneToMany(() => Rating, (rating) => rating.user)
+    ratings: Rating[];
+
+    @OneToMany(() => Favorite, (favorite) => favorite.user)
+    favorites: Favorite[];
+    
+    @OneToMany(() => Course, (course) => course.instructor)
+    courses: Course[];
 
 }

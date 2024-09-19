@@ -10,8 +10,8 @@ export class Topic {
 
     @Column({type:'varchar',length:100})
     topic: string;
-/*
+
     @OneToMany(() => CourseTopic, (courseTopic) => courseTopic.topic)
     courseTopics: CourseTopic[];
-*/
+
 }
