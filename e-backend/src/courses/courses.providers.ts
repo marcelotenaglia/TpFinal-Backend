@@ -9,5 +9,6 @@ export const coursesProviders = [
     useFactory:(dataSource: DataSource) => dataSource.getRepository(Course),
 
     inject: [constants.dataSource]
+
 },
 ];

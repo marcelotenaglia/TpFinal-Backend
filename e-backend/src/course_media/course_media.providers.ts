@@ -8,6 +8,8 @@ export const courseMediaProviders = [
 
     useFactory:(dataSource: DataSource) => dataSource.getRepository(CourseMedia),
 
+
     inject: [constants.dataSource]
+
 },
 ];

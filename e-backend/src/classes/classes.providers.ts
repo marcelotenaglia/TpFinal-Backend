@@ -8,6 +8,8 @@ export const classesProviders = [
 
     useFactory:(dataSource: DataSource) => dataSource.getRepository(Class),
 
+
     inject: [constants.dataSource]
+
 },
 ];
