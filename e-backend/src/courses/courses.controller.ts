@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
+import { Course } from './entities/course.entity';
 
 @Controller('courses')
 export class CoursesController {
@@ -13,13 +14,13 @@ export class CoursesController {
   }
 
   @Get()
-  findAll() {
+  async findAll() {
     return this.coursesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.coursesService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number):Promise<Course> {
+    return this.coursesService.findOne(id);
   }
 
   @Patch(':id')

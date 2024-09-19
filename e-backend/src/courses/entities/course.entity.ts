@@ -49,6 +49,7 @@ export class Course {
     courseTopics: CourseTopic[];
 
     @ManyToOne(() => Category, (category) => category.courses)
+    @JoinColumn({ name: 'category_id' })
     category: Category;
 
 }

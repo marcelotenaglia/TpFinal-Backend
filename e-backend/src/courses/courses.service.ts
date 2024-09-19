@@ -28,12 +28,6 @@ constructor(
   }
 
   async findAll():Promise<Course[]> {
-    // const courses = await this.courseRepository.createQueryBuilder('course')
-    // .leftJoinAndSelect('course.instructor', 'instructor')
-    // .leftJoinAndSelect('course.category', 'category')
-    // .leftJoinAndSelect('course.courseTopics','courseTopics')
-    // .leftJoinAndSelect('courseTopics.topic', 'topic') 
-    // .getMany();
     const courses = await this.courseRepository.createQueryBuilder('course')
     .leftJoinAndSelect('course.instructor', 'instructor')
     .leftJoinAndSelect('course.category', 'category')
@@ -43,12 +37,31 @@ constructor(
     .getMany();
 
     //const courses = await this.courseRepository.find({relations: ['instructor']});
-    // if(!courses.length) throw new NotFoundException("No hay cursos");
+     if(!courses.length) throw new NotFoundException("No hay cursos");
    return courses;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} course`;
+  async findOne(courseid: number):Promise<Course> {
+    const course = await this.courseRepository.createQueryBuilder('course')
+    .leftJoinAndSelect('course.instructor', 'instructor')
+    .leftJoinAndSelect('course.category', 'category')
+    .leftJoinAndSelect('course.courseTopics', 'courseTopics')
+    .leftJoinAndSelect('courseTopics.topic', 'topic')
+    .leftJoinAndSelect('course.classes', 'classes')
+    .select([
+      'course.title',
+      'instructor.name',
+      'classes.title',
+      'topic.topic',
+      'category.name',
+    ])
+    .where('course.id = :id', { id: courseid })
+    .getOne();
+    
+    if(!course){
+      throw new NotFoundException('El curso no fue encontrado');
+    }
+    return course;
   }
 
   update(id: number, updateCourseDto: UpdateCourseDto) {

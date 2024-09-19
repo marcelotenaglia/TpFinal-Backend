@@ -1,4 +1,4 @@
-import { Entity,PrimaryColumn,ManyToOne } from "typeorm";
+import { Entity,PrimaryColumn,ManyToOne,JoinColumn } from "typeorm";
 import { Course } from "src/courses/entities/course.entity";
 import { Topic } from "src/topics/entities/topic.entity";
 
@@ -14,8 +14,10 @@ export class CourseTopic {
     
 
     @ManyToOne(() => Course, (course) => course.courseTopics)
+    @JoinColumn({ name: 'course_id' })
     course : Course;
 
     @ManyToOne(() => Topic, (topic) => topic.courseTopics)
+    @JoinColumn({ name: 'topic_id' })
     topic: Topic;
 }

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column,ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column,ManyToOne, JoinColumn } from 'typeorm';
 import { Course } from 'src/courses/entities/course.entity';
 
 
@@ -19,6 +19,7 @@ export class Class {
 
 
     @ManyToOne(() => Course, (couseEntity) => couseEntity.classes)
+    @JoinColumn({name: 'course_id'})
     course: Course;
 
 
