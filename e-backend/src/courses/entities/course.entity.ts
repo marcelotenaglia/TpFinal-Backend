@@ -33,8 +33,8 @@ export class Course {
     @OneToMany(() => Class, (classEntity) => classEntity.course,{ eager: true })
     classes: Class[];
 
-    @OneToOne(() => CourseMedia, (courseMedia) => courseMedia.course,{ eager: true })
-    media: CourseMedia;
+    // @OneToOne(() => CourseMedia, (courseMedia) => courseMedia.course,{ eager: true })
+    // media: CourseMedia;
 
 
     @ManyToOne(() => User, (user) => user.courses, { nullable: false })

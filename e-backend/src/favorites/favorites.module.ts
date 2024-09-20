@@ -20,5 +20,6 @@ import { favoritesProviders } from './favorites.providers';
     ...userProviders,
     ...favoritesProviders,
     FavoritesService],
+    exports:[...userProviders]
 })
 export class FavoritesModule {}

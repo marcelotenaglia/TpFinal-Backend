@@ -23,19 +23,19 @@ export class UsersController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   findOne(@Param('id',ParseIntPipe) id: number):Promise<User> {
-    return this.usersService.findOne(+id);
+    return this.usersService.findOne(id);
   }
 
   @Patch('/:id')
   @HttpCode(HttpStatus.OK)
   async update(@Param('id',ParseIntPipe) id: number,@Body() updateUserDto: UpdateUserDto):Promise<User>
    {
-    return this.usersService.update(+id, updateUserDto);
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseIntPipe) id: number):Promise<void> {
-    return this.usersService.remove(+id);
+    return this.usersService.remove(id);
   }
 }

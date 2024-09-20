@@ -11,8 +11,8 @@ export class CourseMedia {
     @Column()
     image: Buffer;
     
-    @OneToOne(() => Course)
-    @JoinColumn() // Se usa JoinColumn para indicar la columna de la clave foránea en una relación OneToOne
-    course: Course;
+    // @OneToOne(() => Course)
+    // @JoinColumn() // Se usa JoinColumn para indicar la columna de la clave foránea en una relación OneToOne
+    // course: Course;
 
 }

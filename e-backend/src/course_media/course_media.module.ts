@@ -4,6 +4,7 @@ import { CourseMediaController } from './course_media.controller';
 import { DatabaseModule } from 'src/database/database.modele';
 import { CoursesModule } from 'src/courses/courses.module';
 import { coursesProviders } from 'src/courses/courses.providers';
+import { courseMediaProviders } from './course_media.providers';
 
 @Module({
   imports:[
@@ -14,6 +15,7 @@ import { coursesProviders } from 'src/courses/courses.providers';
   controllers: [CourseMediaController],
   providers: [
     ...coursesProviders,
+    ...courseMediaProviders,
     CourseMediaService],
 })
 export class CourseMediaModule {}

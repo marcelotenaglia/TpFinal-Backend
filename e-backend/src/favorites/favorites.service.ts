@@ -21,25 +21,26 @@ export class FavoritesService {
   ) { }
 
 
-  async addFavorite(userId: number, courseId: number): Promise<Favorite> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+  async addFavorite(user_id: number, course_id: number): Promise<Favorite> {
+    const user = await this.userRepository.findOne({ where: { id: user_id } });
     if (!user) {
       throw new Error('No se encontró un usuario con ese ID');
     }
-
-    const course = await this.courseRepository.findOne({ where: { id: courseId } });
+    const course = await this.courseRepository.findOne({ where: { id: course_id } });
+    
     if (!course) {
       throw new Error('No se encontró un curso con ese ID');
     }
+   
     const favorite = await this.favoritesRepository.create({user,course});
     return this.favoritesRepository.save(favorite);
   }
 
-  async removeFavorite(userId: number, courseId: number): Promise<void> {
+  async removeFavorite(user_id: number, course_id: number): Promise<void> {
     const favorite = await this.favoritesRepository.findOne({
       where:{
-        user:{id:userId},
-        course:{id:courseId}
+        user:{id:user_id},
+        course:{id:course_id}
       }});
 
       if (!favorite) {
