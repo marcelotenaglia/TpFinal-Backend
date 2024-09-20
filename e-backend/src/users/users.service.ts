@@ -91,6 +91,14 @@ export class UsersService {
         );
       user.role = role;
     }
+
+    if (updateUserDto.birthdate) {
+      const birthdate = new Date(updateUserDto.birthdate);
+      const age = this.calculateAge(birthdate);
+      if (age < 15) {
+        throw new BadRequestException('El usuario debe ser mayor de 15 años');
+      }
+    }
     Object.assign(user, updateUserDto);
     return this.userRepository.save(user);
   }
