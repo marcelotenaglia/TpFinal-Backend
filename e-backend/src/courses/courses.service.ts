@@ -57,6 +57,33 @@ constructor(
     ])
     .where('course.id = :id', { id: courseid })
     .getOne();
+  //   const course = await this.courseRepository.createQueryBuilder('course')
+  // .leftJoinAndSelect('course.instructor', 'instructor')
+  // .leftJoinAndSelect('course.category', 'category')
+  // .leftJoinAndSelect('course.classes', 'classes')
+  // .select([
+  //   'course.title',
+  //   'course.description',
+  //   'course.duration',
+  //   'course.platform',
+  //   'course.price',
+  //   'instructor.name',
+  //   'instructor.email',
+  //   'instructor.birthdate',
+  //   'category.name',
+  //   'classes.title',
+  //   'classes.content',
+  //   'classes.duration'
+  // ])
+  // .addSelect(subQuery => {
+  //   return subQuery
+  //     .select("JSON_ARRAYAGG(JSON_OBJECT( 'topic', topics.topic))", 'topics')
+  //     .from('topics', 'topics')  // Cambiado de 'topic' a 'topics'
+  //     .innerJoin('course_topics', 'ct', 'ct.topic_id = topics.id')
+  //     .where('ct.course_id = course.id');
+  // }, 'topics')
+  // .where('course.id = :id', { id: courseid })
+  // .getRawOne();
     
     if(!course){
       throw new NotFoundException('El curso no fue encontrado');
@@ -68,7 +95,10 @@ constructor(
     return `This action updates a #${id} course`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} course`;
+  async remove(id: number):Promise<void> {
+    const course = await this.courseRepository.findOne({where: {id}});
+    if(!course)
+      throw new NotFoundException(`No se encontro el curso con id: ${id}`);
+    await this.courseRepository.delete(course);
   }
 }

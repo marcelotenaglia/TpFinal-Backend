@@ -6,6 +6,7 @@ import { UsersModule } from 'src/users/users.module';
 import { CoursesModule } from 'src/courses/courses.module';
 import { coursesProviders } from 'src/courses/courses.providers';
 import { userProviders } from 'src/users/users.providers';
+import { favoritesProviders } from './favorites.providers';
 
 @Module({
   imports:[
@@ -17,6 +18,8 @@ import { userProviders } from 'src/users/users.providers';
   providers: [
     ...coursesProviders,
     ...userProviders,
+    ...favoritesProviders,
     FavoritesService],
+    exports:[...userProviders]
 })
 export class FavoritesModule {}
