@@ -4,6 +4,7 @@ import { CategoriesController } from './categories.controller';
 import { DatabaseModule } from 'src/database/database.modele';
 import { CoursesModule } from 'src/courses/courses.module';
 import { coursesProviders } from 'src/courses/courses.providers';
+import { categoriesProviders } from './categories.providers';
 
 @Module({
 
@@ -15,6 +16,8 @@ import { coursesProviders } from 'src/courses/courses.providers';
   controllers: [CategoriesController],
   providers: [
     ...coursesProviders,
+    ...categoriesProviders,
     CategoriesService],
+  exports:[...categoriesProviders]
 })
 export class CategoriesModule {}
