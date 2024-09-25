@@ -88,6 +88,7 @@ export class CoursesService {
       .leftJoinAndSelect('course.courseTopics', 'courseTopics')
       .leftJoinAndSelect('courseTopics.topic', 'topic')
       .leftJoinAndSelect('course.classes', 'classes')
+      .where('course.disable = :disable',{disable:true})
       .getMany();
 
     //const courses = await this.courseRepository.find({relations: ['instructor']});
@@ -96,6 +97,24 @@ export class CoursesService {
   }
 
   async findOne(courseid: number): Promise<Course> {
+    // const course = await this.courseRepository
+    //   .createQueryBuilder('course')
+    //   .leftJoinAndSelect('course.instructor', 'instructor')
+    //   .leftJoinAndSelect('course.category', 'category')
+    //   .leftJoinAndSelect('course.courseTopics', 'courseTopics')
+    //   .leftJoinAndSelect('courseTopics.topic', 'topic')
+    //   .leftJoinAndSelect('course.classes', 'classes')
+    //   .select([
+    //     'course.title',
+    //     'instructor.name',
+    //     'classes.title',
+    //     'topic.topic',
+    //     'category.name',
+    //   ])
+    //   .where('course.id = :id', { id: courseid })
+    //   .andWhere('course.disable = :disable', { disable: true })
+    //   .getOne();
+
     const course = await this.courseRepository
       .createQueryBuilder('course')
       .leftJoinAndSelect('course.instructor', 'instructor')
@@ -103,42 +122,11 @@ export class CoursesService {
       .leftJoinAndSelect('course.courseTopics', 'courseTopics')
       .leftJoinAndSelect('courseTopics.topic', 'topic')
       .leftJoinAndSelect('course.classes', 'classes')
-      .select([
-        'course.title',
-        'instructor.name',
-        'classes.title',
-        'topic.topic',
-        'category.name',
-      ])
       .where('course.id = :id', { id: courseid })
       .getOne();
-    //   const course = await this.courseRepository.createQueryBuilder('course')
-    // .leftJoinAndSelect('course.instructor', 'instructor')
-    // .leftJoinAndSelect('course.category', 'category')
-    // .leftJoinAndSelect('course.classes', 'classes')
-    // .select([
-    //   'course.title',
-    //   'course.description',
-    //   'course.duration',
-    //   'course.platform',
-    //   'course.price',
-    //   'instructor.name',
-    //   'instructor.email',
-    //   'instructor.birthdate',
-    //   'category.name',
-    //   'classes.title',
-    //   'classes.content',
-    //   'classes.duration'
-    // ])
-    // .addSelect(subQuery => {
-    //   return subQuery
-    //     .select("JSON_ARRAYAGG(JSON_OBJECT( 'topic', topics.topic))", 'topics')
-    //     .from('topics', 'topics')  // Cambiado de 'topic' a 'topics'
-    //     .innerJoin('course_topics', 'ct', 'ct.topic_id = topics.id')
-    //     .where('ct.course_id = course.id');
-    // }, 'topics')
-    // .where('course.id = :id', { id: courseid })
-    // .getRawOne();
+
+    if(!course.disable)
+      throw new NotFoundException('El curso fue dado de baja')
 
     if (!course) {
       throw new NotFoundException('El curso no fue encontrado');
@@ -170,7 +158,7 @@ export class CoursesService {
     const course = await this.courseRepository.findOne({ where: { id } });
     if (!course)
       throw new NotFoundException(`No se encontro el curso con id: ${id}`);
-    course.disable= false;
+    course.disable = false;
     await this.courseRepository.save(course);
   }
 }

@@ -59,7 +59,7 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    const users = await this.userRepository.find();
+    const users = await this.userRepository.find({where: {disable : true}});
     if (!users.length)
       throw new NotFoundException('No hay usuarios en la base de datos');
     return users;
@@ -71,6 +71,8 @@ export class UsersService {
       throw new NotFoundException(
         'El usuario no existe o no se encuentra en la base de datos',
       );
+    if(users.disable === false)
+      throw new NotFoundException('El Usuario fue dado de baja')
     return users;
   }
 
