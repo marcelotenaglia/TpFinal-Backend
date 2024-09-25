@@ -18,7 +18,7 @@ export class CreateUserDto {
 
     @IsNotEmpty({ message: 'El rol es obligatorio' })
     @IsIn([1, 2, 3], { message: 'El rol no es valido' })
-    roleId: number;
+    role_id: number;
    
     @IsNotEmpty({ message: 'The password is required.' })
     @Length(8, 255, { message: 'The password must be at least 8 characters long.' })

@@ -25,12 +25,12 @@ export class UsersService {
 
     //controlar el Rol
     const role = await this.userRepository.findOne({
-      where: { id: createUserDto.roleId },
+      where: { id: createUserDto.role_id },
     });
 
     if (!role) {
       throw new NotFoundException(
-        `No se encontró un rol con el ID ${createUserDto.roleId}`,
+        `No se encontró un rol con el ID ${createUserDto.role_id}`,
       );
     }
     //Controlar la edad
@@ -81,13 +81,13 @@ export class UsersService {
       throw new NotFoundException(`No se encontró un usuario con el ID ${id}`);
 
     //si actulizamos el Rol del usuario
-    if (updateUserDto.roleId) {
+    if (updateUserDto.role_id) {
       const role = await this.roleRepository.findOne({
-        where: { id: updateUserDto.roleId },
+        where: { id: updateUserDto.role_id },
       });
       if (!role)
         throw new NotFoundException(
-          `No se encontró un rol con el ID ${updateUserDto.roleId}`,
+          `No se encontró un rol con el ID ${updateUserDto.role_id}`,
         );
       user.role = role;
     }
