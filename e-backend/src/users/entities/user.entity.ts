@@ -18,6 +18,12 @@ export class User {
 
     @Column({ type: 'date' })
     birthdate: Date;
+
+    @Column({type: 'boolean', default: true})
+    disable: boolean;
+
+    @Column({ type: 'varchar', length: 255 })
+    password: string;
     
     @ManyToOne(() => Role, (role) => role.users)
     @JoinColumn({name: 'role_id'})
@@ -31,5 +37,6 @@ export class User {
     
     @OneToMany(() => Course, (course) => course.instructor)
     courses: Course[];
+    
 
 }

@@ -26,6 +26,9 @@ export class Course {
     @Column({type:'decimal', precision:4,scale:2})
     price:number;
 
+    @Column({type: 'boolean', default: true})
+    disable: boolean;
+
 
 
     //RELACIONES
