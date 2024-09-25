@@ -170,6 +170,7 @@ export class CoursesService {
     const course = await this.courseRepository.findOne({ where: { id } });
     if (!course)
       throw new NotFoundException(`No se encontro el curso con id: ${id}`);
-    await this.courseRepository.delete(course);
+    course.disable= false;
+    await this.courseRepository.save(course);
   }
 }

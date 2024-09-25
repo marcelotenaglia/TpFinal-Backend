@@ -41,6 +41,8 @@ import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsDecimal,I
         @ArrayNotEmpty()
         @IsInt({ each: true, message: 'Cada ID de tema debe ser un número entero' })
         topicIds: number[];
+
+        disable: boolean = true;
     
 }
 

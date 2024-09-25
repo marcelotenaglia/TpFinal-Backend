@@ -107,7 +107,8 @@ export class UsersService {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user)
       throw new NotFoundException(`No se encontró un usuario con el ID ${id}`);
-    await this.userRepository.delete(user);
+    user.disable = false;
+    await this.userRepository.save(user);
   }
 
   private calculateAge(birthdate: Date): number {
