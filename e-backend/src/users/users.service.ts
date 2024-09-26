@@ -34,8 +34,6 @@ export class UsersService {
         `No se encontró un rol con el ID ${createUserDto.role_id}`,
       );
     }
-    //Controlar la edad
-    const birthdate = new Date(createUserDto.birthdate);
 
 
     // Verificar la edad
