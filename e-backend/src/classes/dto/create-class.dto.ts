@@ -17,5 +17,5 @@ export class CreateClassDto {
 
     @IsNumber({}, { message: 'El ID del curso debe ser un número' })
     @IsNotEmpty({ message: 'El ID del curso es obligatorio' })
-    courseId: number; // Asumiendo que se recibe el ID del curso
+    course_id: number; // Asumiendo que se recibe el ID del curso
 }
