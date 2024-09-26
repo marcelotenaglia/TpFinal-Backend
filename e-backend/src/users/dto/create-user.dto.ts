@@ -20,10 +20,10 @@ export class CreateUserDto {
     @IsIn([1, 2, 3], { message: 'El rol no es valido' })
     roleId: number;
    
-    @IsNotEmpty({ message: 'The password is required.' })
-    @Length(8, 255, { message: 'The password must be at least 8 characters long.' })
+    @IsNotEmpty({ message: 'La contraseña es obligatoria.' })
+    @Length(8, 255, { message: 'La contraseña debe tener al menos 8 caracteres.' })
     @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_])/, { 
-        message: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.' 
+        message: 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.' 
     })
     password: string;
 
