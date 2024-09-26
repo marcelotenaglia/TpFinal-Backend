@@ -22,9 +22,10 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    // Verificar el DTO recibido
 
-    //controlar el Rol
     const role = await this.userRepository.findOne({
+
       where: { id: createUserDto.role_id },
     });
 
@@ -36,27 +37,37 @@ export class UsersService {
     //Controlar la edad
     const birthdate = new Date(createUserDto.birthdate);
 
+
+    // Verificar la edad
+    const birthdate = new Date(createUserDto.birthdate);
     const age = this.calculateAge(birthdate);
+
     if (age < 15) {
-      throw new BadRequestException('El usuario debe ser mayor de 15 años');
+        throw new BadRequestException('El usuario debe ser mayor de 15 años');
     }
-    //Controlar el Email
+
     const mail = await this.userRepository.findOne({
-      where: { email: createUserDto.email },
-    });
-    if (mail) {
-      throw new NotFoundException(
-        `El usuario con el correo ${createUserDto.email} ya existe`,
-      );
-    }
-    //cargar el usuario
-    const user = await this.userRepository.create({
-      ...createUserDto,
-      role,
+        where: { email: createUserDto.email },
     });
 
-    return this.userRepository.save(user);
-  }
+    // Verificar si el correo ya existe
+
+    if (mail) {
+        throw new NotFoundException(
+            `El usuario con el correo ${createUserDto.email} ya existe`,
+        );
+    }
+
+    const user = await this.userRepository.create({
+        ...createUserDto,
+        role,
+    });
+
+    const savedUser = await this.userRepository.save(user);
+
+    return savedUser;
+}
+
 
   async findAll(): Promise<User[]> {
     const users = await this.userRepository.find();
