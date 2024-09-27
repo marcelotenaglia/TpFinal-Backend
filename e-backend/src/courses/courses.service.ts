@@ -97,19 +97,12 @@ export class CoursesService {
 
   async findOne(courseid: number): Promise<Course> {
     const course = await this.courseRepository
-      .createQueryBuilder('course')
-      .leftJoinAndSelect('course.instructor', 'instructor')
-      .leftJoinAndSelect('course.category', 'category')
-      .leftJoinAndSelect('course.courseTopics', 'courseTopics')
-      .leftJoinAndSelect('courseTopics.topic', 'topic')
-      .leftJoinAndSelect('course.classes', 'classes')
-      .select([
-        'course.title',
-        'instructor.name',
-        'classes.title',
-        'topic.topic',
-        'category.name',
-      ])
+    .createQueryBuilder('course')
+    .leftJoinAndSelect('course.instructor', 'instructor')
+    .leftJoinAndSelect('course.category', 'category')
+    .leftJoinAndSelect('course.courseTopics', 'courseTopics')
+    .leftJoinAndSelect('courseTopics.topic', 'topic')
+    .leftJoinAndSelect('course.classes', 'classes')
       .where('course.id = :id', { id: courseid })
       .getOne();
     //   const course = await this.courseRepository.createQueryBuilder('course')
