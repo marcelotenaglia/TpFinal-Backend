@@ -13,7 +13,7 @@ export class User {
     @Column('varchar', {length: 255})
     name: string;
 
-    @Column({ unique: true, length: 255 })
+    @Column('varchar',{ unique: true, length: 255 })
     email: string;
 
     @Column({ type: 'date' })
@@ -22,7 +22,7 @@ export class User {
     @Column({type: 'boolean', default: true})
     disable: boolean;
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'varchar', length: 60 }) 
     password: string;
     
     @ManyToOne(() => Role, (role) => role.users)
