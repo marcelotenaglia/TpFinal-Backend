@@ -82,13 +82,26 @@ export class CoursesService {
   }
   async findAll(): Promise<Course[]> {
     const courses = await this.courseRepository
-      .createQueryBuilder('course')
-      .leftJoinAndSelect('course.instructor', 'instructor')
-      .leftJoinAndSelect('course.category', 'category')
-      .leftJoinAndSelect('course.courseTopics', 'courseTopics')
-      .leftJoinAndSelect('courseTopics.topic', 'topic')
-      .leftJoinAndSelect('course.classes', 'classes')
-      .getMany();
+  .createQueryBuilder('course')
+  .leftJoinAndSelect('course.instructor', 'instructor')
+  .leftJoinAndSelect('course.category', 'category')
+  .leftJoinAndSelect('course.courseTopics', 'courseTopics')
+  .leftJoinAndSelect('courseTopics.topic', 'topic')
+  .leftJoinAndSelect('course.classes', 'classes')
+  .select([
+    'course.id', 
+    'course.title', 
+    'course.description', 
+    'course.duration', 
+    'course.platform', 
+    'course.price',
+    'instructor.name', 
+    'category.name', 
+    'courseTopics.topic_id',                  
+    'topic.topic',            
+    'classes.title'            
+  ])
+  .getMany();
 
     //const courses = await this.courseRepository.find({relations: ['instructor']});
     if (!courses.length) throw new NotFoundException('No hay cursos');
@@ -103,36 +116,21 @@ export class CoursesService {
     .leftJoinAndSelect('course.courseTopics', 'courseTopics')
     .leftJoinAndSelect('courseTopics.topic', 'topic')
     .leftJoinAndSelect('course.classes', 'classes')
+    .select([
+      'course.id', 
+      'course.title', 
+      'course.description', 
+      'course.duration', 
+      'course.platform', 
+      'course.price',
+      'instructor.name', 
+      'category.name', 
+      'courseTopics.topic_id',                  
+      'topic.topic',            
+      'classes.title'            
+    ])
       .where('course.id = :id', { id: courseid })
       .getOne();
-    //   const course = await this.courseRepository.createQueryBuilder('course')
-    // .leftJoinAndSelect('course.instructor', 'instructor')
-    // .leftJoinAndSelect('course.category', 'category')
-    // .leftJoinAndSelect('course.classes', 'classes')
-    // .select([
-    //   'course.title',
-    //   'course.description',
-    //   'course.duration',
-    //   'course.platform',
-    //   'course.price',
-    //   'instructor.name',
-    //   'instructor.email',
-    //   'instructor.birthdate',
-    //   'category.name',
-    //   'topic.name'
-    //   'classes.title',
-    //   'classes.content',
-    //   'classes.duration'
-    // ])
-    // .addSelect(subQuery => {
-    //   return subQuery
-    //     .select("JSON_ARRAYAGG(JSON_OBJECT( 'topic', topics.topic))", 'topics')
-    //     .from('topics', 'topics')  // Cambiado de 'topic' a 'topics'
-    //     .innerJoin('course_topics', 'ct', 'ct.topic_id = topics.id')
-    //     .where('ct.course_id = course.id');
-    // }, 'topics')
-    // .where('course.id = :id', { id: courseid })
-    // .getRawOne();
 
     if (!course) {
       throw new NotFoundException('El curso no fue encontrado');

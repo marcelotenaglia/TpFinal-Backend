@@ -67,15 +67,40 @@ export class UsersService {
 }
 
 
-  async findAll(): Promise<User[]> {
-    const users = await this.userRepository.find();
-    if (!users.length)
-      throw new NotFoundException('No hay usuarios en la base de datos');
-    return users;
-  }
+async findAll(): Promise<User[]> {
+  const users = await this.userRepository.createQueryBuilder('user')
+    .leftJoinAndSelect('user.role', 'role')
+    .select([
+      'user.id',          // Selecciona el campo `id` de la tabla `users`
+      'user.name',        // Selecciona el campo `name` de la tabla `users`
+      'user.email',       // Selecciona el campo `email` de la tabla `users`
+      'user.role_id',     // Selecciona el campo `role_id` de la tabla `users`
+      'role.name'         // Selecciona el campo `name` de la tabla `roles`
+    ])
+    .getMany();           // Esto obtiene el array de resultados
+
+  if (!users.length)
+    throw new NotFoundException('No hay usuarios en la base de datos');
+
+  return users;
+}
+  
 
   async findOne(id: number): Promise<User> {
-    const users = await this.userRepository.findOne({ where: { id } });
+    const users = await this.userRepository.createQueryBuilder('user')   //.findOne({ where: { id } });
+    .leftJoinAndSelect('user.role', 'role')
+    .select([ 
+      'user.id',          // Selecciona el campo `id` de la tabla `users`
+      'user.name',        // Selecciona el campo `name` de la tabla `users`
+      'user.email',       // Selecciona el campo `email` de la tabla `users`
+      'user.role_id',     // Selecciona el campo `role_id` de la tabla `users`
+      'role.name'         // Selecciona el campo `name` de la tabla `roles`
+    ])
+    .where('user.id = :id', { id })
+    .getOne();
+
+    
+    
     if (!users)
       throw new NotFoundException(
         'El usuario no existe o no se encuentra en la base de datos',

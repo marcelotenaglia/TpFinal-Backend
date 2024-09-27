@@ -25,7 +25,19 @@ export class RolesService {
   }
 
   async findAll(): Promise<Role[]> {
-    return await this.rolesRepository.find({relations: ['users']});
+    const roles = await this.rolesRepository
+  .createQueryBuilder('role')
+  .leftJoinAndSelect('role.users', 'user') // Realiza el join con la tabla `users`
+  .select([
+    'role.id',          // Selecciona el campo `id` de la tabla `roles`
+    'role.name',        // Selecciona el campo `name` de la tabla `roles`
+    'user.id',          // Selecciona el campo `id` de la tabla `users`
+    'user.name',        // Selecciona el campo `name` de la tabla `users`
+    'user.email'        // Selecciona el campo `email` de la tabla `users`
+  ])
+  .getMany();
+
+    return roles;
   }
 
   findOne(id: number) {
