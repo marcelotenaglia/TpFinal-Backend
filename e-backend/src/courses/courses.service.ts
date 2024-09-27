@@ -119,6 +119,7 @@ export class CoursesService {
     //   'instructor.email',
     //   'instructor.birthdate',
     //   'category.name',
+    //   'topic.name'
     //   'classes.title',
     //   'classes.content',
     //   'classes.duration'
