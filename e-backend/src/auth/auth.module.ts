@@ -5,10 +5,20 @@ import { HashService } from './hash/hash.service';
 import { DatabaseModule } from 'src/database/database.modele';
 import { userProviders } from 'src/users/users.providers';
 import { rolesProviders } from 'src/roles/roles.providers';
+import { JwtModule } from '@nestjs/jwt';
+import {ConfigModule} from '@nestjs/config';
 
 @Module({
   imports:[
     DatabaseModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    JwtModule.register({
+      global:true,
+      secret: process.env.JWT_SECRET,  //hacer una variable de entorno 
+      signOptions:{expiresIn: process.env.JWT_EXPIRATION},
+    }),
   ],
 
   providers: [AuthService, HashService, 

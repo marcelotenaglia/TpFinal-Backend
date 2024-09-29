@@ -12,6 +12,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { HashService } from './hash/hash.service';
 import { LoginDto } from './dto/create-login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +24,8 @@ export class AuthService {
     private roleRepository: Repository<Role>,
 
     private readonly hashService: HashService,
+
+    private readonly jwtService:JwtService,
   ) {}
 
   async register(createUserDto: CreateUserDto) {
@@ -32,9 +35,10 @@ export class AuthService {
 
     // Verificar el DTO recibido
 
-    const role = await this.userRepository.findOne({
+    const role = await this.roleRepository.findOne({
       where: { id: createUserDto.role_id },
     });
+
 
     if (!role) {
       throw new NotFoundException(
@@ -52,6 +56,7 @@ export class AuthService {
 
     const mail = await this.userRepository.findOne({
       where: { email: createUserDto.email },
+      relations: ['role'],
     });
 
     // Verificar si el correo ya existe
@@ -65,42 +70,45 @@ export class AuthService {
     const user = await this.userRepository.create({
       ...createUserDto,
       role,
-      password:securedPassword,
+      password: securedPassword,
     });
 
     const savedUser = await this.userRepository.save(user);
-    const {password,id,...rest} = savedUser;
+    const { password, id, ...rest } = savedUser;
     return rest;
   }
 
-
-
-  async login(loginDto:LoginDto):Promise<Partial<User>> {
+  async login(loginDto: LoginDto): Promise<{accest_token :string}> {
     //validar mail
     const user = await this.userRepository.findOne({
-        where: { email: loginDto.email },
-      });
-      if (!user) {
-        throw new UnauthorizedException(
-          `Usuario o contraseña Invalido`,
-        );
-      }
-
+      where: { email: loginDto.email },
+      relations: ['role'],
+    });
+    if (!user) {
+      throw new UnauthorizedException(`Usuario o contraseña Invalido`);
+    }
 
     //validar Pass
-      const isAuthenticated = await this.hashService.comparePassword(loginDto.password,user.password);
+    const isAuthenticated = await this.hashService.comparePassword(
+      loginDto.password,
+      user.password,
+    );
 
-      if(!isAuthenticated)
-      {
-        throw new UnauthorizedException(
-            `Usuario o contraseña Invalido`,
-          );
-      }
-      const {id,password,...rest} = user;
+    if (!isAuthenticated) {
+      throw new UnauthorizedException(`Usuario o contraseña Invalido`);
+    }
+    const { id, password, ...rest } = user;
 
-    return rest;
+    const payload = {
+      sub: id,
+      email : user.email,
+      rol : user.role.id,
+    }
+
+    return {accest_token : await this.jwtService.signAsync(payload) };
   }
 
+ 
 
 
 
