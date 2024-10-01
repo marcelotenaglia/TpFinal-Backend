@@ -13,7 +13,7 @@ import { CourseTopic } from 'src/course_topics/entities/course_topic.entity';
 import { Topic } from 'src/topics/entities/topic.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Category } from 'src/categories/entities/category.entity';
-
+import { CourseMedia } from 'src/course_media/entities/course_media.entity';
 @Injectable()
 export class CoursesService {
   constructor(
@@ -31,14 +31,19 @@ export class CoursesService {
 
     @Inject(constants.categoriesRepository)
     private categoryRepository: Repository<Category>,
+
+    
+    @Inject(constants.course_mediaRepository)
+    private courseMediaRepository: Repository<CourseMedia>,
   ) {}
 
   async create(createCourseDto: CreateCourseDto): Promise<Course> {
-    const { instructor_id, category_id, topicIds, ...courseData } =
+    const {instructor_id, category_id, topicIds, ...courseData } =
       createCourseDto;
 
     const instructor = await this.userRepository.findOne({
       where: { id: instructor_id },
+      relations: ['role'],
     });
     const category = await this.categoryRepository.findOne({
       where: { id: category_id },
@@ -47,9 +52,11 @@ export class CoursesService {
     if (!instructor) {
       throw new NotFoundException('No se encontro el instructor');
     }
+    
     if (instructor.role.id === 2) {
       throw new ForbiddenException('No tiene permisos para crear cursos');
     }
+
 
     if (!category) {
       throw new NotFoundException('No se encontro la categoría');
@@ -61,6 +68,7 @@ export class CoursesService {
       category,
     });
     await this.courseRepository.save(course);
+
     // Topics
     if (topicIds && topicIds.length > 0) {
       const topics = await this.topicRepository.find({
