@@ -5,6 +5,9 @@ import { UpdateCourseMediaDto } from './dto/update-course_media.dto';
 @Injectable()
 export class CourseMediaService {
   create(createCourseMediaDto: CreateCourseMediaDto) {
+
+    
+
     return 'This action adds a new courseMedia';
   }
 
