@@ -41,7 +41,7 @@ async create (
 @Body() createCourseDto: CreateCourseDto,
 @UploadedFile() file: Express.Multer.File){
   console.log(file);
-  //createCourseDto.filename = file.filename
+  createCourseDto.filename = file.filename
   return this.coursesService.create(createCourseDto)
 }
 
