@@ -4,26 +4,38 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course } from './entities/course.entity';
 import { FileInterceptor } from '../interceptor/file.interceptor';
+//import { FileInterceptor } from '@nestjs/platform-express';
 @Controller('courses')
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-  @Post()
-  @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
-  @HttpCode(HttpStatus.CREATED)
-  async create(
-  @Body() createCourseDto: CreateCourseDto, 
-  @UploadedFile() file: Express.Multer.File
-   ) {
+  // @Post()
+  // @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
+  // @HttpCode(HttpStatus.CREATED)
+  // async create(
+  // @Body() createCourseDto: CreateCourseDto, 
+  // @UploadedFile() file: Express.Multer.File,
+  //  ) {
     
-    if (!file) {
-      throw new BadRequestException ('Es obligatorio cargar una foto')
-    } 
+  //   if (!file) {
+  //     throw new BadRequestException ('Es obligatorio cargar una foto')
+  //   } 
     
-    createCourseDto.filename = file.filename
+  //   createCourseDto.filename = file.filename
 
-    return this.coursesService.create(createCourseDto);
-  }
+  //   return this.coursesService.create(createCourseDto);
+  // }
+
+  @Post()
+  
+@UseInterceptors(FileInterceptor.createFileInterceptor('file'))
+async create (
+@Body() createCourseDto: CreateCourseDto,
+@UploadedFile() file: Express.Multer.File){
+  console.log(file);
+  createCourseDto.filename = file.filename
+  return this.coursesService.create(createCourseDto)
+}
 
   @Get()
   @HttpCode(HttpStatus.OK)

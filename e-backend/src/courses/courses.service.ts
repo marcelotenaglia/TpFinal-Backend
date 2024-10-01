@@ -43,6 +43,7 @@ export class CoursesService {
 
     const instructor = await this.userRepository.findOne({
       where: { id: instructor_id },
+      relations: ['role'],
     });
     const category = await this.categoryRepository.findOne({
       where: { id: category_id },
@@ -51,9 +52,11 @@ export class CoursesService {
     if (!instructor) {
       throw new NotFoundException('No se encontro el instructor');
     }
+    
     if (instructor.role.id === 2) {
       throw new ForbiddenException('No tiene permisos para crear cursos');
     }
+
 
     if (!category) {
       throw new NotFoundException('No se encontro la categoría');

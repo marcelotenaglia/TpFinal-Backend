@@ -35,8 +35,8 @@ import { Type } from 'class-transformer';
         @Type(() => Number)
         instructor_id: number;
     
-        @IsDecimal({ decimal_digits: '2', force_decimal: false }, { message: 'El precio debe ser un número decimal con hasta 2 decimales' })
         @IsOptional()
+        @IsDecimal({ decimal_digits: '2', force_decimal: false }, { message: 'El precio debe ser un número decimal con hasta 2 decimales' })
         @Type(() => Number)
         @IsNotEmpty({ message: 'El precio es obligatorio', always: true })
         @Min(0, { message: 'El precio no puede ser negativo' })
