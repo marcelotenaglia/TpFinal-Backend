@@ -1,5 +1,5 @@
 
-import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsDecimal,IsArray, ArrayNotEmpty, IsPassportNumber} from 'class-validator';
+import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsNumber,IsArray, ArrayNotEmpty, IsPassportNumber} from 'class-validator';
 import { Type } from 'class-transformer';
 
 
