@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Inject,
   Injectable,
@@ -7,7 +8,7 @@ import {
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { constants } from 'src/constants/constants';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Course } from './entities/course.entity';
 import { CourseTopic } from 'src/course_topics/entities/course_topic.entity';
 import { Topic } from 'src/topics/entities/topic.entity';
@@ -37,12 +38,13 @@ export class CoursesService {
     const { instructor_id, category_id, topicIds, ...courseData } =
       createCourseDto;
 
-    const instructor = await this.userRepository.findOne({
-      where: { id: instructor_id },
-    });
-    const category = await this.categoryRepository.findOne({
-      where: { id: category_id },
-    });
+    const [instructor, category] = await Promise.all([
+      this.userRepository.findOne({
+        where: { id: instructor_id },
+        relations: ['role'],
+      }),
+      this.categoryRepository.findOneBy({ id: category_id }),
+    ]);
 
     if (!instructor) {
       throw new NotFoundException('No se encontro el instructor');
@@ -64,44 +66,47 @@ export class CoursesService {
     // Topics
     if (topicIds && topicIds.length > 0) {
       const topics = await this.topicRepository.find({
-        where: topicIds.map((id) => ({ id })),
+        where: { id: In(topicIds) },
       });
+
       if (topics.length !== topicIds.length) {
-        throw new NotFoundException('No se encontraron los Topics');
+        throw new NotFoundException(
+          'No se encontraron todos los Topics especificados',
+        );
       }
 
-      for (const topic of topics) {
+      const courseTopics = topics.map((topic) => {
         const courseTopic = new CourseTopic();
         courseTopic.course = course;
         courseTopic.topic = topic;
-        await this.courseTopicsRepository.save(courseTopic);
-      }
-
-      return;
+        return courseTopic;
+      });
+      await this.courseTopicsRepository.save(courseTopics);
+      return course;
     }
   }
   async findAll(): Promise<Course[]> {
     const courses = await this.courseRepository
-  .createQueryBuilder('course')
-  .leftJoinAndSelect('course.instructor', 'instructor')
-  .leftJoinAndSelect('course.category', 'category')
-  .leftJoinAndSelect('course.courseTopics', 'courseTopics')
-  .leftJoinAndSelect('courseTopics.topic', 'topic')
-  .leftJoinAndSelect('course.classes', 'classes')
-  .select([
-    'course.id', 
-    'course.title', 
-    'course.description', 
-    'course.duration', 
-    'course.platform', 
-    'course.price',
-    'instructor.name', 
-    'category.name', 
-    'courseTopics.topic_id',                  
-    'topic.topic',            
-    'classes.title'            
-  ])
-  .getMany();
+      .createQueryBuilder('course')
+      .leftJoinAndSelect('course.instructor', 'instructor')
+      .leftJoinAndSelect('course.category', 'category')
+      .leftJoinAndSelect('course.courseTopics', 'courseTopics')
+      .leftJoinAndSelect('courseTopics.topic', 'topic')
+      .leftJoinAndSelect('course.classes', 'classes')
+      .select([
+        'course.id',
+        'course.title',
+        'course.description',
+        'course.duration',
+        'course.platform',
+        'course.price',
+        'instructor.name',
+        'category.name',
+        'courseTopics.topic_id',
+        'topic.topic',
+        'classes.title',
+      ])
+      .getMany();
 
     //const courses = await this.courseRepository.find({relations: ['instructor']});
     if (!courses.length) throw new NotFoundException('No hay cursos');
@@ -110,25 +115,25 @@ export class CoursesService {
 
   async findOne(courseid: number): Promise<Course> {
     const course = await this.courseRepository
-    .createQueryBuilder('course')
-    .leftJoinAndSelect('course.instructor', 'instructor')
-    .leftJoinAndSelect('course.category', 'category')
-    .leftJoinAndSelect('course.courseTopics', 'courseTopics')
-    .leftJoinAndSelect('courseTopics.topic', 'topic')
-    .leftJoinAndSelect('course.classes', 'classes')
-    .select([
-      'course.id', 
-      'course.title', 
-      'course.description', 
-      'course.duration', 
-      'course.platform', 
-      'course.price',
-      'instructor.name', 
-      'category.name', 
-      'courseTopics.topic_id',                  
-      'topic.topic',            
-      'classes.title'            
-    ])
+      .createQueryBuilder('course')
+      .leftJoinAndSelect('course.instructor', 'instructor')
+      .leftJoinAndSelect('course.category', 'category')
+      .leftJoinAndSelect('course.courseTopics', 'courseTopics')
+      .leftJoinAndSelect('courseTopics.topic', 'topic')
+      .leftJoinAndSelect('course.classes', 'classes')
+      .select([
+        'course.id',
+        'course.title',
+        'course.description',
+        'course.duration',
+        'course.platform',
+        'course.price',
+        'instructor.name',
+        'category.name',
+        'courseTopics.topic_id',
+        'topic.topic',
+        'classes.title',
+      ])
       .where('course.id = :id', { id: courseid })
       .getOne();
 
@@ -139,30 +144,65 @@ export class CoursesService {
   }
 
   async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
-    const course = await this.courseRepository.findOneByOrFail({ id });
+    const { instructor_id, category_id, topicIds, ...courseData } = updateCourseDto;
+  const course = await this.courseRepository.findOneByOrFail({ id });
 
-    if (updateCourseDto.instructor_id) {
-      course.instructor = await this.userRepository.findOneByOrFail({
-        id: updateCourseDto.instructor_id,
-      });
+  // Actualización del instructor
+  if (instructor_id) {
+    course.instructor = await this.userRepository.findOneOrFail({
+      where: { id: instructor_id },
+      relations: ['role'],
+    });
+
+    if (course.instructor.role.id === 2) {
+      throw new ForbiddenException('El instructor no tiene permisos para crear cursos');
+    }
+  }
+
+  // Actualización de la categoría
+  if (category_id) {
+    course.category = await this.categoryRepository.findOneByOrFail({
+      id: category_id,
+    });
+  }
+
+  // Actualización de los datos básicos del curso
+  Object.assign(course, courseData);
+  await this.courseRepository.save(course);
+
+  // Actualización de los topics (temas)
+  if (topicIds && topicIds.length > 0) {
+    // Primero elimina las relaciones anteriores en `CourseTopic`
+    await this.courseTopicsRepository.delete({ course: { id: course.id } });
+
+    // Luego encuentra los nuevos topics y asigna la relación
+    const topics = await this.topicRepository.find({
+      where: { id: In(topicIds) },
+    });
+
+    if (topics.length !== topicIds.length) {
+      throw new NotFoundException('No se encontraron todos los Topics especificados');
     }
 
-    if (updateCourseDto.category_id) {
-      course.category = await this.categoryRepository.findOneByOrFail({
-        id: updateCourseDto.category_id,
-      });
-    }
+    const courseTopics = topics.map((topic) => {
+      const courseTopic = new CourseTopic();
+      courseTopic.course = course;
+      courseTopic.topic = topic;
+      return courseTopic;
+    });
 
-    Object.assign(course, updateCourseDto);
+    // Guarda los nuevos courseTopics
+    await this.courseTopicsRepository.save(courseTopics);
+  }
 
-    return this.courseRepository.save(course);
+  return course;
   }
 
   async remove(id: number): Promise<void> {
     const course = await this.courseRepository.findOne({ where: { id } });
     if (!course)
       throw new NotFoundException(`No se encontro el curso con id: ${id}`);
-    course.disable= false;
+    course.disable = false;
     await this.courseRepository.save(course);
   }
 }

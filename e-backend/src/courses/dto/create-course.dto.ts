@@ -1,4 +1,4 @@
-import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsDecimal,IsArray, ArrayNotEmpty} from 'class-validator';
+import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsNumber,IsArray, ArrayNotEmpty} from 'class-validator';
 
 
 
@@ -31,7 +31,7 @@ import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsDecimal,I
         @IsInt({ message: 'El Instructor debe ser un número entero' })
         instructor_id: number;
     
-        @IsDecimal({ decimal_digits: '2', force_decimal: false }, { message: 'El precio debe ser un número decimal con hasta 2 decimales' })
+        @IsNumber({maxDecimalPlaces: 2}, {message: 'El precio debe ser un número con hasta 2 decimales'})
         @IsNotEmpty({ message: 'El precio es obligatorio', always: true })
         @Min(0, { message: 'El precio no puede ser negativo' })
         @Max(10000, { message: 'El precio no puede exceder los 10000' })

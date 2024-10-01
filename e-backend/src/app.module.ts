@@ -15,7 +15,7 @@ import { BuyCoursesModule } from './buy_courses/buy_courses.module';
 import { RatingModule } from './rating/rating.module';
 import { CategoriesModule } from './categories/categories.module';
 import { AuthModule } from './auth/auth.module';
-import {ConfigModule} from '@nestjs/config';
+
 
 
 @Module({

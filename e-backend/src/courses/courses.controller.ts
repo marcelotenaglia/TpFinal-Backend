@@ -9,7 +9,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-  @UseGuards(AuthGuard)
+ // @UseGuards(AuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createCourseDto: CreateCourseDto) {
@@ -30,7 +30,7 @@ export class CoursesController {
 
 
   @Patch(':id')
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   update(@Param('id',ParseIntPipe) id: number, @Body() updateCourseDto: UpdateCourseDto) {
     return this.coursesService.update(id, updateCourseDto);
