@@ -37,13 +37,16 @@ import { Type } from 'class-transformer';
         @Type(() => Number)
         instructor_id: number;
     
-
-        @IsNumber({maxDecimalPlaces: 2}, {message: 'El precio debe ser un número con hasta 2 decimales'})
-        @IsOptional()
+        @Type(() => Number)
+        @IsNumber(
+            { maxDecimalPlaces: 2 },
+            { message: 'El precio debe ser un número con hasta 2 decimales' }
+        )
         @IsNotEmpty({ message: 'El precio es obligatorio', always: true })
         @Min(0, { message: 'El precio no puede ser negativo' })
         @Max(10000, { message: 'El precio no puede exceder los 10000' })
         price: number;
+        
 
         @IsOptional()
         @IsArray()
