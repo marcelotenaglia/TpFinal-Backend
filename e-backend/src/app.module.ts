@@ -14,8 +14,13 @@ import { CourseMediaModule } from './course_media/course_media.module';
 import { BuyCoursesModule } from './buy_courses/buy_courses.module';
 import { RatingModule } from './rating/rating.module';
 import { CategoriesModule } from './categories/categories.module';
+import { AuthModule } from './auth/auth.module';
+
+
+
 @Module({
-  imports: [BillModule, UsersModule, RolesModule, BillDetailModule, FavoritesModule,CoursesModule, CourseTopicsModule, TopicsModule, CompanyModule, CourseMediaModule, BuyCoursesModule, RatingModule, CategoriesModule],
+  imports: [
+    BillModule, UsersModule, RolesModule, BillDetailModule, FavoritesModule,CoursesModule, CourseTopicsModule, TopicsModule, CompanyModule, CourseMediaModule, BuyCoursesModule, RatingModule, CategoriesModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

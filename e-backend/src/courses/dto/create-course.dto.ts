@@ -1,5 +1,7 @@
+
 import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsDecimal,IsArray, ArrayNotEmpty, IsPassportNumber} from 'class-validator';
 import { Type } from 'class-transformer';
+
 
 
 
@@ -35,9 +37,9 @@ import { Type } from 'class-transformer';
         @Type(() => Number)
         instructor_id: number;
     
+
+        @IsNumber({maxDecimalPlaces: 2}, {message: 'El precio debe ser un número con hasta 2 decimales'})
         @IsOptional()
-        @IsDecimal({ decimal_digits: '2', force_decimal: false }, { message: 'El precio debe ser un número decimal con hasta 2 decimales' })
-        @Type(() => Number)
         @IsNotEmpty({ message: 'El precio es obligatorio', always: true })
         @Min(0, { message: 'El precio no puede ser negativo' })
         @Max(10000, { message: 'El precio no puede exceder los 10000' })
@@ -54,7 +56,7 @@ import { Type } from 'class-transformer';
         @IsOptional()
         filename: string;
 
-        disable: boolean = true;
+        
     
 }
 
