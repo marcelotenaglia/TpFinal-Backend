@@ -1,4 +1,4 @@
-import { Entity,Column,PrimaryGeneratedColumn,OneToOne,JoinColumn } from "typeorm";
+import { Entity,Column,PrimaryGeneratedColumn,OneToOne,JoinColumn, ManyToOne } from "typeorm";
 import { Course } from "src/courses/entities/course.entity";
 
 
@@ -8,11 +8,14 @@ export class CourseMedia {
     @PrimaryGeneratedColumn()
     id:number;
 
-    @Column()
-    image: Buffer;
+    @Column({type: 'varchar', length: 255})
+    filename: string;
+
+    @Column({type: 'varchar', length: 500})
+    mediaPath: string;
     
-    // @OneToOne(() => Course)
-    // @JoinColumn() // Se usa JoinColumn para indicar la columna de la clave foránea en una relación OneToOne
-    // course: Course;
+    @OneToOne(() => Course, (course) => course.media)
+    @JoinColumn({name: 'course_id'})
+    course: Course;
 
 }

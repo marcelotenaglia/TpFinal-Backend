@@ -1,4 +1,7 @@
-import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsNumber,IsArray, ArrayNotEmpty} from 'class-validator';
+
+import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsDecimal,IsArray, ArrayNotEmpty, IsPassportNumber} from 'class-validator';
+import { Type } from 'class-transformer';
+
 
 
 
@@ -13,6 +16,7 @@ import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsNumber,Is
         description: string;
     
         @IsInt({ message: 'La duración debe ser un número entero' })
+        @Type(() => Number)
         @IsNotEmpty({ message: 'La duración es obligatoria', always: true })
         @Min(1, { message: 'La duración debe ser al menos 1' })
         @Max(1000, { message: 'La duración no puede exceder los 1000 minutos' })
@@ -25,22 +29,32 @@ import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsNumber,Is
     
         @IsOptional()
         @IsInt({ message: 'La categoría debe ser un número entero' })
+        @Type(() => Number)
         category_id: number;
 
         @IsOptional()
         @IsInt({ message: 'El Instructor debe ser un número entero' })
+        @Type(() => Number)
         instructor_id: number;
     
+
         @IsNumber({maxDecimalPlaces: 2}, {message: 'El precio debe ser un número con hasta 2 decimales'})
+        @IsOptional()
         @IsNotEmpty({ message: 'El precio es obligatorio', always: true })
         @Min(0, { message: 'El precio no puede ser negativo' })
         @Max(10000, { message: 'El precio no puede exceder los 10000' })
         price: number;
 
+        @IsOptional()
         @IsArray()
         @ArrayNotEmpty()
         @IsInt({ each: true, message: 'Cada ID de tema debe ser un número entero' })
-        topicIds: number[];
+        @Type(() => Number)
+        topicIds? : number[];
+
+        @IsString()
+        @IsOptional()
+        filename: string;
 
         
     
