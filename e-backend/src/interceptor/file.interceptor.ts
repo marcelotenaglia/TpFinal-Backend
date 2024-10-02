@@ -9,7 +9,7 @@ export class FileInterceptor {
   static createFileInterceptor(fieldName: string) {
     return MulterInterceptor(fieldName, {
       storage: diskStorage({
-        destination: '../uploads',
+        destination: './uploads',
         filename: (req, file, cb) => {
            const uniqueSuffix = crypto.randomUUID();
           const ext = extname(file.originalname);

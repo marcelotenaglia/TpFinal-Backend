@@ -38,11 +38,12 @@ export class CoursesController {
   
 @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
 async create (
-@Body() createCourseDto: CreateCourseDto,
-@UploadedFile() file: Express.Multer.File){
-  console.log(file);
-  //createCourseDto.filename = file.filename
-  return this.coursesService.create(createCourseDto)
+@UploadedFile() file: Express.Multer.File,
+@Body() createCourseDto: CreateCourseDto)
+{
+
+  const filename = file?.filename || '';
+  return this.coursesService.create(createCourseDto,filename);
 }
 
   @Get()

@@ -2,6 +2,7 @@ import { Entity,Column,PrimaryGeneratedColumn,OneToOne,JoinColumn, ManyToOne } f
 import { Course } from "src/courses/entities/course.entity";
 
 
+
 @Entity('course_media')
 export class CourseMedia {
 
@@ -11,8 +12,6 @@ export class CourseMedia {
     @Column({type: 'varchar', length: 255})
     filename: string;
 
-    @Column({type: 'varchar', length: 500})
-    mediaPath: string;
     
     @OneToOne(() => Course, (course) => course.media)
     @JoinColumn({name: 'course_id'})
