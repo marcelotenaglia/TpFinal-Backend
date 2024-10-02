@@ -34,8 +34,7 @@ export class CoursesController {
   // }
 
 
-  @Post()
-  
+@Post()  
 @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
 async create (
 @UploadedFile() file: Express.Multer.File,
