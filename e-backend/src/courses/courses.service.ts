@@ -40,6 +40,7 @@ export class CoursesService {
   async create(
     createCourseDto: CreateCourseDto,
     fileName: string,
+    videoName: string,
   ): Promise<Course> {
     const { instructor_id, category_id, topicIds, ...courseData } =
       createCourseDto;
@@ -73,12 +74,12 @@ export class CoursesService {
    
     //Media
     
-      const courseMedia = new CourseMedia();
-      courseMedia.filename = fileName;
-      courseMedia.course = course; // Relacionar con el curso creado
+    const courseMedia = new CourseMedia();
+    courseMedia.filename = fileName;
+    courseMedia.course = course; // Relacionar con el curso creado
+    courseMedia.videoname = videoName;
 
-      await this.courseMediaRepository.save(courseMedia);
-      
+    await this.courseMediaRepository.save(courseMedia);
 
 
       
