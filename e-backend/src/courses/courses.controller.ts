@@ -1,12 +1,13 @@
 
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe,HttpCode,HttpStatus, UseGuards, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe,HttpCode,HttpStatus, UseGuards, UseInterceptors, UploadedFile, BadRequestException, UploadedFiles } from '@nestjs/common';
 
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course } from './entities/course.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { FileInterceptor } from '../interceptor/file.interceptor';
+import { FileVideoInterceptor } from 'src/interceptor/file-video.interceptor';
+
 //import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('courses')
@@ -14,37 +15,23 @@ export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
 
- // @UseGuards(AuthGuard)
 
-  // @Post()
-  // @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
-  // @HttpCode(HttpStatus.CREATED)
-  // async create(
-  // @Body() createCourseDto: CreateCourseDto, 
-  // @UploadedFile() file: Express.Multer.File,
-  //  ) {
-    
-  //   if (!file) {
-  //     throw new BadRequestException ('Es obligatorio cargar una foto')
-  //   } 
-    
-  //   createCourseDto.filename = file.filename
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  // @UseGuards(AuthGuard)
+  @UseInterceptors(FileVideoInterceptor.createInterceptor())
+  async create(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Body() createCourseDto: CreateCourseDto
+  ) {
+    const file = files.find(f => f.fieldname === 'file');
+    const video = files.find(f => f.fieldname === 'video');
 
-  //   return this.coursesService.create(createCourseDto);
-  // }
+    const filename = file?.filename || '';
+    const videoname = video?.filename || '';
 
-
-@Post()  
-@UseInterceptors(FileInterceptor.createFileInterceptor('file'))
-async create (
-@UploadedFile() file: Express.Multer.File,
-@Body() createCourseDto: CreateCourseDto)
-{
-
-  const filename = file?.filename || '';
-  return this.coursesService.create(createCourseDto,filename);
-
-}
+    return this.coursesService.create(createCourseDto, filename, videoname);
+  }
 
   @Get()
   @HttpCode(HttpStatus.OK)
