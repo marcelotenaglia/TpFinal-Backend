@@ -14,16 +14,17 @@ export class FavoritesController {
     @Param('courseId',ParseIntPipe)courseId : number,
   )
   {
-    return this.favoritesService.addFavorite(userId,courseId)
+    return this.favoritesService.toggleFavorite(userId,courseId)
   }
 
-  @Delete(':userId/:courseId')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async removeFavorite(
+  @Get(':userId')
+  @HttpCode(HttpStatus.OK)
+  async getFavoritesByUser(
     @Param('userId',ParseIntPipe)userId : number,
-    @Param('courseId',ParseIntPipe)courseId : number,
   )
   {
-    return this.favoritesService.removeFavorite(userId,courseId)
+    return this.favoritesService.getUserFavorites(userId);
   }
+
+  
 }
