@@ -113,6 +113,7 @@ export class CoursesService {
       .leftJoinAndSelect('course.courseTopics', 'courseTopics')
       .leftJoinAndSelect('courseTopics.topic', 'topic')
       .leftJoinAndSelect('course.classes', 'classes')
+      .leftJoinAndSelect('course.media', 'courseMedia')
       .select([
         'course.id',
         'course.title',
@@ -125,12 +126,12 @@ export class CoursesService {
         'courseTopics.topic_id',
         'topic.topic',
         'classes.title',
+        'courseMedia.filename',
       ])
       .getMany();
-
     //const courses = await this.courseRepository.find({relations: ['instructor']});
     if (!courses.length) throw new NotFoundException('No hay cursos');
-    return ;
+    return courses;
   }
 
   async findOne(courseid: number): Promise<Course> {
@@ -141,6 +142,7 @@ export class CoursesService {
       .leftJoinAndSelect('course.courseTopics', 'courseTopics')
       .leftJoinAndSelect('courseTopics.topic', 'topic')
       .leftJoinAndSelect('course.classes', 'classes')
+      .leftJoinAndSelect('course.media', 'courseMedia')
       .select([
         'course.id',
         'course.title',
@@ -153,6 +155,8 @@ export class CoursesService {
         'courseTopics.topic_id',
         'topic.topic',
         'classes.title',
+        'courseMedia.filename',
+        'courseMedia.videoname',
       ])
       .where('course.id = :id', { id: courseid })
       .getOne();

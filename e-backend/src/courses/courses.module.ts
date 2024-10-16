@@ -28,6 +28,7 @@ imports:[
   forwardRef(() =>  FavoritesModule),
   forwardRef(() =>  CourseTopicsModule),
   forwardRef(() =>  CategoriesModule),
+  forwardRef(() => CourseMediaModule),
 ],
 
   controllers: [CoursesController],
@@ -41,6 +42,7 @@ imports:[
     ...categoriesProviders,
     ...coursesProviders,
     ...topicProviders,
+    ...courseMediaProviders,
     CoursesService],
 
     exports:[...coursesProviders]

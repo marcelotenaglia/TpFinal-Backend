@@ -37,7 +37,6 @@ export class Course {
     classes: Class[];
 
     @OneToOne(() => CourseMedia, (courseMedia) => courseMedia.course)
-    @JoinColumn({name: 'courseMedia_id'})
     media: CourseMedia;
 
 
