@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, ParseIntPipe } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { Topic } from 'src/topics/entities/topic.entity';
 
 @Controller('categories')
 export class CategoriesController {
@@ -18,18 +19,10 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(+id);
-  }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoriesService.update(+id, updateCategoryDto);
-  }
+  @Get(':id/topics')
+  async getTopicsByCategoryId(@Param('id') category_id: number): Promise<Topic[]> {
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoriesService.remove(+id);
+    return await this.categoriesService.getTopicsByCategoryId(category_id); // Devuelve todos los topics asociados a la categoría
   }
 }

@@ -52,12 +52,13 @@ export class CoursesService {
       }),
       this.categoryRepository.findOneBy({ id: category_id }),
     ]);
+    
 
     if (!instructor) {
       throw new NotFoundException('No se encontro el instructor');
     }
 
-    if (instructor.role.id === 2) {
+    if (instructor.role.id !== 2) {
       throw new ForbiddenException('No tiene permisos para crear cursos');
     }
 
@@ -113,6 +114,7 @@ export class CoursesService {
       .leftJoinAndSelect('course.courseTopics', 'courseTopics')
       .leftJoinAndSelect('courseTopics.topic', 'topic')
       .leftJoinAndSelect('course.classes', 'classes')
+      .leftJoinAndSelect('course.media', 'courseMedia')
       .select([
         'course.id',
         'course.title',
@@ -125,12 +127,12 @@ export class CoursesService {
         'courseTopics.topic_id',
         'topic.topic',
         'classes.title',
+        'courseMedia.filename',
       ])
       .getMany();
-
     //const courses = await this.courseRepository.find({relations: ['instructor']});
     if (!courses.length) throw new NotFoundException('No hay cursos');
-    return ;
+    return courses;
   }
 
   async findOne(courseid: number): Promise<Course> {
@@ -141,6 +143,7 @@ export class CoursesService {
       .leftJoinAndSelect('course.courseTopics', 'courseTopics')
       .leftJoinAndSelect('courseTopics.topic', 'topic')
       .leftJoinAndSelect('course.classes', 'classes')
+      .leftJoinAndSelect('course.media', 'courseMedia')
       .select([
         'course.id',
         'course.title',
@@ -153,6 +156,8 @@ export class CoursesService {
         'courseTopics.topic_id',
         'topic.topic',
         'classes.title',
+        'courseMedia.filename',
+        'courseMedia.videoname',
       ])
       .where('course.id = :id', { id: courseid })
       .getOne();

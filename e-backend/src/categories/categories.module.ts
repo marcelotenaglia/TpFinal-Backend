@@ -5,6 +5,7 @@ import { DatabaseModule } from 'src/database/database.modele';
 import { CoursesModule } from 'src/courses/courses.module';
 import { coursesProviders } from 'src/courses/courses.providers';
 import { categoriesProviders } from './categories.providers';
+import { topicProviders } from 'src/topics/topics.providers';
 
 @Module({
 
@@ -17,6 +18,7 @@ import { categoriesProviders } from './categories.providers';
   providers: [
     ...coursesProviders,
     ...categoriesProviders,
+    ...topicProviders,
     CategoriesService],
   exports:[...categoriesProviders]
 })

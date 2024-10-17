@@ -4,12 +4,16 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { constants } from 'src/constants/constants';
 import { Repository } from 'typeorm';
 import { Category } from './entities/category.entity';
+import { Topic } from 'src/topics/entities/topic.entity';
 
 @Injectable()
 export class CategoriesService {
   constructor (
     @Inject(constants.categoriesRepository)
-    private categoriesRepository: Repository<Category>
+    private categoriesRepository: Repository<Category>,
+
+    @Inject(constants.topicsRepository)
+    private topicsRepository: Repository<Topic>
   ) {}
   create(createCategoryDto: CreateCategoryDto) {
     return 'This action adds a new category';
@@ -22,15 +26,13 @@ export class CategoriesService {
       return categories;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
-  }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
-  }
+  async getTopicsByCategoryId(category_id: number): Promise<Topic[]> {
+    const topics = await this.topicsRepository.find({
+      where: { category: { id: category_id } },  // Filtra los topics por category_id
+    });
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+    if(!topics.length) throw new NotFoundException('La categoria no tiene Topics');
+    return topics; // Devuelve todos los topics encontrados
   }
 }
