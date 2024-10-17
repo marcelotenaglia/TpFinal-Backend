@@ -52,12 +52,13 @@ export class CoursesService {
       }),
       this.categoryRepository.findOneBy({ id: category_id }),
     ]);
+    
 
     if (!instructor) {
       throw new NotFoundException('No se encontro el instructor');
     }
 
-    if (instructor.role.id === 2) {
+    if (instructor.role.id !== 2) {
       throw new ForbiddenException('No tiene permisos para crear cursos');
     }
 
