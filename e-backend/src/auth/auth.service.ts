@@ -75,7 +75,11 @@ export class AuthService {
 
     const savedUser = await this.userRepository.save(user);
     const { password, id, ...rest } = savedUser;
-    return rest;
+    const logDto = new LoginDto();
+    logDto.email = rest.email;
+    logDto.password = password;
+
+    return this.login(logDto);
   }
 
   async login(loginDto: LoginDto): Promise<{accest_token :string}> {
