@@ -23,7 +23,14 @@ export class FavoritesController {
     @Param('userId',ParseIntPipe)userId : number,
   )
   {
-    return this.favoritesService.getUserFavorites(userId);
+    const favorites = await this.favoritesService.getUserFavorites(userId);
+
+    if (!favorites || favorites.length === 0) {
+      // En lugar de lanzar un error 404, devolvemos un array vacío
+      return [];
+    }
+  
+    return favorites;
   }
 
   

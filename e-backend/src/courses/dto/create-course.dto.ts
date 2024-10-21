@@ -1,5 +1,5 @@
 
-import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsNumber,IsArray, ArrayNotEmpty, IsPassportNumber} from 'class-validator';
+import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsNumber,IsArray, ArrayNotEmpty, IsPassportNumber, IsUrl} from 'class-validator';
 import { Type } from 'class-transformer';
 
 
@@ -59,6 +59,10 @@ import { Type } from 'class-transformer';
         @IsOptional()
         filename: string;
 
+        @IsOptional()
+        @IsString()
+        @IsUrl({}, { message: 'Debe ser una URL válida' })
+        videoUrl: string;
         
     
 }

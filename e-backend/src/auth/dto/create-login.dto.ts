@@ -9,7 +9,7 @@ export class LoginDto
     email: string;
 
     @IsNotEmpty({ message: 'La contraseña es obligatoria.' })
-    @Length(8, 12, { message: 'La contraseña debe tener al menos 8 caracteres.' })
+    @Length(8, 14, { message: 'La contraseña debe tener al menos 8 caracteres.' })
     @IsStrongPassword({
         minLength: 8,
         minLowercase: 1,
