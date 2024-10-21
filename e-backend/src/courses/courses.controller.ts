@@ -6,7 +6,7 @@ import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course } from './entities/course.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { FileVideoInterceptor } from 'src/interceptor/file-video.interceptor';
+import { FileInterceptor } from 'src/interceptor/file.interceptor';
 
 //import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -18,20 +18,15 @@ export class CoursesController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  // @UseGuards(AuthGuard)
-  @UseInterceptors(FileVideoInterceptor.createInterceptor())
+  @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
   async create(
-    @UploadedFiles() files: Array<Express.Multer.File>,
+    @UploadedFile() file: Express.Multer.File, // Cambiar a @UploadedFile() para un solo archivo
     @Body() createCourseDto: CreateCourseDto
   ) {
-    const file = files.find(f => f.fieldname === 'file');
-    const video = files.find(f => f.fieldname === 'video');
-
     const filename = file?.filename || '';
-    const videoname = video?.filename || '';
-
-    return this.coursesService.create(createCourseDto, filename, videoname);
+    return this.coursesService.create(createCourseDto, filename);
   }
+
 
   @Get()
   @HttpCode(HttpStatus.OK)

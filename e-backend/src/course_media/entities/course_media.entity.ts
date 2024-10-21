@@ -12,8 +12,8 @@ export class CourseMedia {
     @Column({type: 'varchar', length: 255})
     filename: string;
 
-    @Column({type: 'varchar', length: 255})
-    videoname: string;
+    @Column({ type: 'varchar', length: 255 })
+    videoUrl: string; 
     
     @OneToOne(() => Course, (course) => course.media) // Cambiado para referenciar correctamente
     @JoinColumn({ name: 'course_id' }) // Asegúrate de que esta columna exista en la tabla course_media
