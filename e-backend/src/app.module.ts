@@ -17,6 +17,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { HealthyModule } from './healthy/healthy.module';
 
 
 @Module({
@@ -27,7 +28,7 @@ import { APP_GUARD } from '@nestjs/core';
         limit:40,
       }
     ]),
-    BillModule, UsersModule, RolesModule, BillDetailModule, FavoritesModule,CoursesModule, CourseTopicsModule, TopicsModule, CompanyModule, CourseMediaModule, BuyCoursesModule, RatingModule, CategoriesModule, AuthModule],
+    BillModule, UsersModule, RolesModule, BillDetailModule, FavoritesModule,CoursesModule, CourseTopicsModule, TopicsModule, CompanyModule, CourseMediaModule, BuyCoursesModule, RatingModule, CategoriesModule, AuthModule, HealthyModule],
   controllers: [AppController],
   providers: [AppService, {provide: APP_GUARD, useClass: ThrottlerGuard}],
 })
