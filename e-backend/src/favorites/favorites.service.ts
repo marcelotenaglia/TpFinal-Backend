@@ -57,9 +57,9 @@ export class FavoritesService {
       relations: ['course'],  // Relacionar la tabla de cursos
     });
   
-    if (favorites.length === 0) {
-      throw new NotFoundException('Este usuario no tiene favoritos');
-    }
+    // if (favorites.length === 0) {
+    //   throw new NotFoundException('Este usuario no tiene favoritos');
+    // }
   
     // Extraer los cursos de los favoritos
     const favoriteCourses = favorites.map(favorite => favorite.course);
