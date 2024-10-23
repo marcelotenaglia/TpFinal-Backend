@@ -27,7 +27,7 @@ export class UsersService {
     // Verificar el DTO recibido
 
     const role = await this.userRepository.findOne({
-      where: { id: createUserDto.role_id },
+      where: { id: createUserDto.role_id }, 
     });
 
     if (!role) {

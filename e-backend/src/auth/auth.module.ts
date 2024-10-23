@@ -9,22 +9,24 @@ import { JwtModule } from '@nestjs/jwt';
 import {ConfigModule} from '@nestjs/config';
 
 @Module({
-  imports:[
+  imports: [
     DatabaseModule,
     ConfigModule.forRoot({
+      envFilePath: 'vEntorno.env',  // Asegúrate de que este nombre es correcto
       isGlobal: true,
     }),
     JwtModule.register({
-      global:true,
-      secret: process.env.JWT_SECRET,  //hacer una variable de entorno 
-      signOptions:{expiresIn: process.env.JWT_EXPIRATION},
+      global: true,
+      secret: process.env.JWT_SECRET,  // Variable de entorno para el secret
+      signOptions: { expiresIn: process.env.JWT_EXPIRATION },
     }),
   ],
-
-  providers: [AuthService, HashService, 
-    ...userProviders,
-    ...rolesProviders,
-  ],
-  controllers: [AuthController]
+  providers: [AuthService, HashService, ...userProviders, ...rolesProviders],
+  controllers: [AuthController],
 })
-export class AuthModule {}
+export class AuthModule {
+  constructor() {
+    console.log('JWT_SECRET:', process.env.JWT_SECRET);
+    console.log('JWT_EXPIRATION:', process.env.JWT_EXPIRATION);
+  }
+}
