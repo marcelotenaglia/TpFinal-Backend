@@ -79,7 +79,7 @@ export class AuthService {
     logDto.email = rest.email;
     logDto.password = password;
 
-    return this.login(logDto);
+    return ('usuario creado con exito');
   }
 
   async login(loginDto: LoginDto): Promise<{accest_token :string}> {
