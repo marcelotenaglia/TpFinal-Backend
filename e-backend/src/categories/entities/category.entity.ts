@@ -11,6 +11,12 @@ export class Category {
     @Column({type:'varchar',length:100})
     name: string;
 
+    @Column({type:'varchar',length:255})
+    requisitos : string;
+    
+    @Column({type:'varchar',length:255})
+    certificacion : string;
+
 
     @OneToMany(() => Course, (course) => course.category)
     courses: Course[];

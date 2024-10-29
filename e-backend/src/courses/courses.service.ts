@@ -152,6 +152,8 @@ export class CoursesService {
         'course.price',
         'instructor.name',
         'category.name',
+        'category.requisitos',
+        'category.certificacion',
         'courseTopics.topic_id',
         'topic.topic',
         'classes.title',
