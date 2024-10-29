@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LoginDto } from './dto/create-login.dto';
@@ -20,14 +20,15 @@ export class AuthController {
   async loginUser(@Body() LoginDto: LoginDto) {
     return this.authService.login(LoginDto);
   }
+
+
   @UseGuards(AuthGuard)
-  @Patch('/change-password')
+  @Patch('/change-password/:user_id')
   @HttpCode(HttpStatus.OK)
-  async changePassword(
-    @Req() req,
+ async changePassword(
+    @Param('user_id', ParseIntPipe) userId: number, // Usamos ParseIntPipe para convertir a number
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
-    const userId = req.user.id; 
     return this.authService.changePassword(userId, changePasswordDto);
   }
 }

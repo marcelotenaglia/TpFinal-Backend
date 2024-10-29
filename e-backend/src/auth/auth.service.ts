@@ -97,6 +97,8 @@ export class AuthService {
       loginDto.password,
       user.password,
     );
+    console.log(loginDto.password);
+    console.log(user.password);
 
     if (!isAuthenticated) {
       throw new UnauthorizedException(`Usuario o contraseña Invalido`);
@@ -134,21 +136,23 @@ export class AuthService {
   }
 
 
-  async changePassword(userId: number, changePasswordDto: ChangePasswordDto): Promise<string> {
+  async changePassword(user_id: number, changePasswordDto: ChangePasswordDto): Promise<string> {
     const { currentPassword, newPassword } = changePasswordDto;
-
     // Obtener al usuario por ID
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ where: { id: user_id } });
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
 
     // Verificar si la contraseña actual es correcta
-    const isCurrentPasswordValid = await this.hashService.comparePassword(
-      currentPassword,
+    const isAuthenticated = await this.hashService.comparePassword(
+      changePasswordDto.currentPassword,
       user.password,
+   
     );
-    if (!isCurrentPasswordValid) {
+
+
+    if (!isAuthenticated) {
       throw new UnauthorizedException('La contraseña actual es incorrecta');
     }
 
@@ -156,7 +160,7 @@ export class AuthService {
     const hashedNewPassword = await this.hashService.hashPassWord(newPassword);
 
     // Actualizar la contraseña en la base de datos
-    await this.userRepository.update(userId, { password: hashedNewPassword });
+    await this.userRepository.update(user_id, { password: hashedNewPassword });
 
     return 'Contraseña actualizada correctamente';
   }
