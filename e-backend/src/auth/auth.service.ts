@@ -28,7 +28,7 @@ export class AuthService {
     private readonly jwtService:JwtService,
   ) {}
 
-  async register(createUserDto: CreateUserDto) {
+  async register(createUserDto: CreateUserDto): Promise<{ accest_token: string }> {
     const securedPassword = await this.hashService.hashPassWord(
       createUserDto.password,
     );
@@ -73,13 +73,12 @@ export class AuthService {
       password: securedPassword,
     });
 
-    const savedUser = await this.userRepository.save(user);
-    const { password, id, ...rest } = savedUser;
-    const logDto = new LoginDto();
-    logDto.email = rest.email;
-    logDto.password = password;
+     await this.userRepository.save(user);
 
-    return ('usuario creado con exito');
+    const payload = { sub: user.id, email: user.email, role: user.role.id };
+    
+
+    return { accest_token : await this.jwtService.signAsync(payload) };
   }
 
   async login(loginDto: LoginDto): Promise<{accest_token :string}> {

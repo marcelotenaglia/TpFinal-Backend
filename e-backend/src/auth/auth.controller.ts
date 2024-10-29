@@ -10,14 +10,14 @@ export class AuthController {
 
     @Post('/register')
     @HttpCode(HttpStatus.CREATED)
-    createUser(@Body() createUserDto: CreateUserDto)
+    async createUser(@Body() createUserDto: CreateUserDto)
     {
         return this.authService.register(createUserDto);
     }
 
     @Post('/login')
     @HttpCode(HttpStatus.OK)
-    loginUser(@Body() LoginDto: LoginDto)
+    async loginUser(@Body() LoginDto: LoginDto)
     {
         return this.authService.login(LoginDto);
     }

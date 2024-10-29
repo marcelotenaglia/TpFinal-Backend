@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Param, HttpCode, HttpStatus, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 
 @Controller('favorites')
@@ -9,6 +10,7 @@ export class FavoritesController {
  
   @Post(':userId/:courseId')
   @HttpCode(HttpStatus.CREATED)
+  @UseGuards(AuthGuard)
   async addFavorite(
     @Param('userId',ParseIntPipe)userId : number,
     @Param('courseId',ParseIntPipe)courseId : number,
@@ -19,6 +21,7 @@ export class FavoritesController {
 
   @Get(':userId')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
   async getFavoritesByUser(
     @Param('userId',ParseIntPipe)userId : number,
   )
