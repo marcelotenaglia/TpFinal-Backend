@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { HashService } from './hash/hash.service';
 import { LoginDto } from './dto/create-login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ChangePasswordDto } from './dto/changepass.Dto';
 
 @Injectable()
 export class AuthService {
@@ -130,5 +131,33 @@ export class AuthService {
     }
 
     return age;
+  }
+
+
+  async changePassword(userId: number, changePasswordDto: ChangePasswordDto): Promise<string> {
+    const { currentPassword, newPassword } = changePasswordDto;
+
+    // Obtener al usuario por ID
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    // Verificar si la contraseña actual es correcta
+    const isCurrentPasswordValid = await this.hashService.comparePassword(
+      currentPassword,
+      user.password,
+    );
+    if (!isCurrentPasswordValid) {
+      throw new UnauthorizedException('La contraseña actual es incorrecta');
+    }
+
+    // Encriptar la nueva contraseña
+    const hashedNewPassword = await this.hashService.hashPassWord(newPassword);
+
+    // Actualizar la contraseña en la base de datos
+    await this.userRepository.update(userId, { password: hashedNewPassword });
+
+    return 'Contraseña actualizada correctamente';
   }
 }
