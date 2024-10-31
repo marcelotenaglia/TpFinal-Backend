@@ -28,6 +28,13 @@ export class Course {
 
     @Column({type: 'boolean', default: true})
     disable: boolean;
+    
+    /*@Column({ type: 'date' })
+    startdate: Date;
+    
+    @Column({ type: 'date' })
+    enddate: Date;*/ //faltaria esto 
+  
 
 
 

@@ -1,5 +1,6 @@
 
-import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsNumber,IsArray, ArrayNotEmpty, IsPassportNumber, IsUrl} from 'class-validator';
+import  { IsString, IsNotEmpty, MaxLength, Min,Max,IsOptional,IsInt, IsNumber,IsArray, ArrayNotEmpty,IsDateString, IsPassportNumber, IsUrl} from 'class-validator';
+//import { Transform } from 'class-transformer';
 import { Type } from 'class-transformer';
 
 
@@ -48,12 +49,13 @@ import { Type } from 'class-transformer';
         price: number;
         
 
-        @IsOptional()
+       @IsOptional()
         @IsArray()
         @ArrayNotEmpty()
         @IsInt({ each: true, message: 'Cada ID de tema debe ser un número entero' })
         @Type(() => Number)
         topicIds? : number[];
+
 
         @IsString()
         @IsOptional()
@@ -63,7 +65,15 @@ import { Type } from 'class-transformer';
         @IsString()
         @IsUrl({}, { message: 'Debe ser una URL válida' })
         videoUrl: string;
+
+      /*  @IsOptional()
+        @IsDateString()
+        startdate: string; //"YYYY-MM-DD" 
+        
+        @IsOptional()
+        @IsDateString()
+        enddate: string; //"YYYY-MM-DD" */
         
     
-}
+    }
 

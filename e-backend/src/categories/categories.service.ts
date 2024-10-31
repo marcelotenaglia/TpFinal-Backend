@@ -20,7 +20,8 @@ export class CategoriesService {
   }
 
   async findAll(): Promise<Category[]> {
-    const categories = await this.categoriesRepository.createQueryBuilder('categories').getMany()
+    //const categories = await this.categoriesRepository.createQueryBuilder('categories').getMany()
+    const categories = await this.categoriesRepository.find();
 
     if (!categories.length) throw new NotFoundException ('No hay categorias')
       return categories;
@@ -35,4 +36,12 @@ export class CategoriesService {
     if(!topics.length) throw new NotFoundException('La categoria no tiene Topics');
     return topics; // Devuelve todos los topics encontrados
   }
+  
+  async getAllCategoriesWithTopics(): Promise<Category[]> {
+  return await this.categoriesRepository.find({
+    relations: ['topics'], // Esto  trae todos los datos de la tabla categorias y ademas los de la tabla relacionada topics
+  });
 }
+}
+
+

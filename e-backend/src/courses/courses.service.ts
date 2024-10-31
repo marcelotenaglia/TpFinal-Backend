@@ -127,6 +127,7 @@ export class CoursesService {
         'topic.topic',
         'classes.title',
         'courseMedia.filename',
+        'courseMedia.videoUrl',
       ])
       .getMany();
     //const courses = await this.courseRepository.find({relations: ['instructor']});
