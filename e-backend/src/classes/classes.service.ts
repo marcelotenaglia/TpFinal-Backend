@@ -14,15 +14,15 @@ export class ClassesService {
   @Inject(constants.classesRepository)
   private classesRepository: Repository<Class>,) {}
 
-  async create(content: string, createClassDto: CreateClassDto): Promise<Class> {
-    const { course_id, title, duration } = createClassDto;
+  async create(fileurl: string, createClassDto: CreateClassDto): Promise<Class> {
+    const { course_id, title } = createClassDto;
 
       // Convertir los valores a números
       const courseIdNumber = Number(course_id);
-      const durationNumber = Number(duration);
+   
     
       // Verificar que la conversión sea exitosa
-      if (isNaN(courseIdNumber) || isNaN(durationNumber)) {
+      if (isNaN(courseIdNumber) ) {
         throw new BadRequestException('course_id y duration deben ser números válidos.');
       }
 
@@ -33,8 +33,8 @@ export class ClassesService {
 
     const newClass = this.classesRepository.create({
       title,
-      content,
-      duration: durationNumber,
+      fileurl,
+
       course,
     });
 

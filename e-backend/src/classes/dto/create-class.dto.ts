@@ -11,11 +11,7 @@ export class CreateClassDto {
     @IsNotEmpty({ message: 'El contenido es obligatorio' })
     content: string;
 
-    @IsNumberString({}, { message: 'La duración debe ser un número' })
-    @IsNotEmpty({ message: 'La duración es obligatoria' })
-    @IsOptional()
-    @Type(() => Number) // Convierte a número automáticamente
-    duration: number;
+ 
 
     @IsNumberString({}, { message: 'El ID del curso debe ser un número' })
     @IsNotEmpty({ message: 'El ID del curso es obligatorio' })
