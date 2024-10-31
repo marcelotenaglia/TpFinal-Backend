@@ -17,10 +17,11 @@ export class Class {
     @Column('int')
     duration : number;
 
-
-    @ManyToOne(() => Course, (couseEntity) => couseEntity.classes)
+    @ManyToOne(() => Course, (courseEntity) => courseEntity.classes)
     @JoinColumn({name: 'course_id'})
     course: Course;
+
+   
 
 
 }
