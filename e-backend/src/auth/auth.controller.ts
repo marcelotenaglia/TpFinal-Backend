@@ -28,7 +28,9 @@ export class AuthController {
  async changePassword(
     @Param('user_id', ParseIntPipe) userId: number, // Usamos ParseIntPipe para convertir a number
     @Body() changePasswordDto: ChangePasswordDto,
-  ) {
-    return this.authService.changePassword(userId, changePasswordDto);
+  ):Promise<string> {
+    
+
+    return await this.authService.changePassword(userId, changePasswordDto);
   }
 }

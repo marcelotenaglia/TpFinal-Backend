@@ -97,8 +97,7 @@ export class AuthService {
       loginDto.password,
       user.password,
     );
-    console.log(loginDto.password);
-    console.log(user.password);
+
 
     if (!isAuthenticated) {
       throw new UnauthorizedException(`Usuario o contraseña Invalido`);
@@ -158,10 +157,10 @@ export class AuthService {
 
     // Encriptar la nueva contraseña
     const hashedNewPassword = await this.hashService.hashPassWord(newPassword);
-
+    
     // Actualizar la contraseña en la base de datos
     await this.userRepository.update(user_id, { password: hashedNewPassword });
-
+    
     return 'Contraseña actualizada correctamente';
   }
 }
