@@ -39,7 +39,7 @@ export class CategoriesService {
   
   async getAllCategoriesWithTopics(): Promise<Category[]> {
   return await this.categoriesRepository.find({
-    relations: ['topics'], // Esto  trae todos los datos de la tabla categorias y ademas los de la tabla relacionada
+    relations: ['topics'], // Esto  trae todos los datos de la tabla categorias y ademas los de la tabla relacionada topics
   });
 }
 }

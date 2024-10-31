@@ -127,6 +127,7 @@ export class CoursesService {
         'topic.topic',
         'classes.title',
         'courseMedia.filename',
+        'courseMedia.videoUrl',
       ])
       .getMany();
     //const courses = await this.courseRepository.find({relations: ['instructor']});
@@ -142,7 +143,7 @@ export class CoursesService {
       .leftJoinAndSelect('course.courseTopics', 'courseTopics')
       .leftJoinAndSelect('courseTopics.topic', 'topic')
       .leftJoinAndSelect('course.classes', 'classes')
-     // .leftJoinAndSelect('course.media', 'courseMedia')
+      .leftJoinAndSelect('course.media', 'courseMedia')
       .select([
         'course.id',
         'course.title',
@@ -157,8 +158,8 @@ export class CoursesService {
         'courseTopics.topic_id',
         'topic.topic',
         'classes.title',
-       // 'courseMedia.filename',
-       // 'courseMedia.videoUrl',
+        'courseMedia.filename',
+        'courseMedia.videoUrl',
       ])
       .where('course.id = :id', { id: courseid })
       .getOne();

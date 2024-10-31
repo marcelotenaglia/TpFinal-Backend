@@ -36,10 +36,8 @@ export class ClassesController {
   @Get('bycourseid/:id')
   @HttpCode(HttpStatus.OK)
   async findClassesByCourseId(@Param('id') courseId: number): Promise<Class[]> {
-    return this.classesService.findClassesByCourseId(courseId);
+    return this.classesService.findClassesByCourseId(courseId); // trae las clases asociadas a un curso
   }
-
-
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClassDto: UpdateClassDto) {
