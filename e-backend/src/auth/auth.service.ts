@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { HashService } from './hash/hash.service';
 import { LoginDto } from './dto/create-login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ChangePasswordDto } from './dto/changepass.Dto';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +29,7 @@ export class AuthService {
     private readonly jwtService:JwtService,
   ) {}
 
-  async register(createUserDto: CreateUserDto) {
+  async register(createUserDto: CreateUserDto): Promise<{ accest_token: string }> {
     const securedPassword = await this.hashService.hashPassWord(
       createUserDto.password,
     );
@@ -73,13 +74,12 @@ export class AuthService {
       password: securedPassword,
     });
 
-    const savedUser = await this.userRepository.save(user);
-    const { password, id, ...rest } = savedUser;
-    const logDto = new LoginDto();
-    logDto.email = rest.email;
-    logDto.password = password;
+     await this.userRepository.save(user);
 
-    return ('usuario creado con exito');
+    const payload = { sub: user.id, email: user.email, role: user.role.id };
+    
+
+    return { accest_token : await this.jwtService.signAsync(payload) };
   }
 
   async login(loginDto: LoginDto): Promise<{accest_token :string}> {
@@ -97,6 +97,7 @@ export class AuthService {
       loginDto.password,
       user.password,
     );
+
 
     if (!isAuthenticated) {
       throw new UnauthorizedException(`Usuario o contraseña Invalido`);
@@ -131,5 +132,35 @@ export class AuthService {
     }
 
     return age;
+  }
+
+
+  async changePassword(user_id: number, changePasswordDto: ChangePasswordDto): Promise<string> {
+    const { currentPassword, newPassword } = changePasswordDto;
+    // Obtener al usuario por ID
+    const user = await this.userRepository.findOne({ where: { id: user_id } });
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    // Verificar si la contraseña actual es correcta
+    const isAuthenticated = await this.hashService.comparePassword(
+      changePasswordDto.currentPassword,
+      user.password,
+   
+    );
+
+
+    if (!isAuthenticated) {
+      throw new UnauthorizedException('La contraseña actual es incorrecta');
+    }
+
+    // Encriptar la nueva contraseña
+    const hashedNewPassword = await this.hashService.hashPassWord(newPassword);
+    
+    // Actualizar la contraseña en la base de datos
+    await this.userRepository.update(user_id, { password: hashedNewPassword });
+    
+    return 'Contraseña actualizada correctamente';
   }
 }
