@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('/users')
 export class UsersController {
@@ -26,7 +27,8 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Patch('/:id')
+  @Patch(':id')
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   async update(@Param('id',ParseIntPipe) id: number,@Body() updateUserDto: UpdateUserDto):Promise<User>
    {
@@ -36,6 +38,7 @@ export class UsersController {
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id', ParseIntPipe) id: number):Promise<void> {
+    
     return this.usersService.remove(id);
   }
 }

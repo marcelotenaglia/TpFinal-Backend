@@ -3,7 +3,7 @@ import { IsDateString, IsString, Length,IsNotEmpty,IsEmail,IsIn, IsStrongPasswor
 export class CreateUserDto {
 
     @IsString()
-    @Length(1, 25)
+    @Length(1, 30)
     @IsNotEmpty({ message: 'El nombre es obligatorio' })
     name: string;
 
