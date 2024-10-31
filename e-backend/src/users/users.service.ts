@@ -93,8 +93,10 @@ export class UsersService {
         'user.id', // Selecciona el campo `id` de la tabla `users`
         'user.name', // Selecciona el campo `name` de la tabla `users`
         'user.email', // Selecciona el campo `email` de la tabla `users`
+        'user.birthdate',
         'user.role_id', // Selecciona el campo `role_id` de la tabla `users`
         'role.name', // Selecciona el campo `name` de la tabla `roles`
+        
       ])
       .where('user.id = :id', { id })
       .getOne();
