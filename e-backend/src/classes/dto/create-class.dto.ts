@@ -14,12 +14,12 @@ export class CreateClassDto {
     @IsNumberString({}, { message: 'La duración debe ser un número' })
     @IsNotEmpty({ message: 'La duración es obligatoria' })
     @IsOptional()
-    @Type(() => Number) // Convierte a número automáticamente
+    //@Type(() => Number) // Convierte a número automáticamente
     duration: number;
 
     @IsNumberString({}, { message: 'El ID del curso debe ser un número' })
     @IsNotEmpty({ message: 'El ID del curso es obligatorio' })
-    @Type(() => Number) // Convierte a número automáticamente
+   // @Type(() => Number) // Convierte a número automáticamente
     course_id: number; // Asumiendo que se recibe el ID del curso
 
     /*@IsString({ message: 'El filename debe ser una cadena de texto' })

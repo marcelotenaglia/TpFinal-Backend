@@ -17,16 +17,16 @@ export class ClassesService {
   async create(content: string, createClassDto: CreateClassDto): Promise<Class> {
     const { course_id, title, duration } = createClassDto;
 
-      // Convertir los valores a números
+     /* // Convertir los valores a números
       const courseIdNumber = Number(course_id);
       const durationNumber = Number(duration);
     
       // Verificar que la conversión sea exitosa
       if (isNaN(courseIdNumber) || isNaN(durationNumber)) {
         throw new BadRequestException('course_id y duration deben ser números válidos.');
-      }
+      }*/
 
-    const course = await this.courseRepository.findOneBy({ id: courseIdNumber});
+    const course = await this.courseRepository.findOneBy({ id:course_id });
     if (!course) {
       throw new NotFoundException('El curso con ese ID no existe o no se encontró.');
     }
@@ -34,7 +34,7 @@ export class ClassesService {
     const newClass = this.classesRepository.create({
       title,
       content,
-      duration: durationNumber,
+      duration,
       course,
     });
 
