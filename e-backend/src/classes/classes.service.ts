@@ -15,7 +15,7 @@ export class ClassesService {
   private classesRepository: Repository<Class>,) {}
 
   async create(fileurl: string, createClassDto: CreateClassDto): Promise<Class> {
-    const { course_id, title } = createClassDto;
+    const { course_id, title, videourl } = createClassDto;
 
      /* // Convertir los valores a números
       const courseIdNumber = Number(course_id);
@@ -34,8 +34,8 @@ export class ClassesService {
     const newClass = this.classesRepository.create({
       title,
       fileurl,
-
       course,
+      videourl
     });
 
     return await this.classesRepository.save(newClass);
