@@ -12,16 +12,18 @@ export class Class {
     title: string;
 
     @Column({type:'text'})
-    content : string;
+    fileurl : string;
 
-    @Column('int')
-    duration : number;
+    @Column({type:'text'})
+    videourl : string;
+
+
     
    /* @Column({type: 'varchar', length: 255}) agregar estas columnas 
     filename: string; // este dato es para el front
 
-     /* @Column({type: 'varchar', length: 255}) agregar estas columnas
-    fileUrl: string;  // este dato para traer el file
+      @Column({type: 'varchar', length: 255}) agregar estas columnas
+    fileurl: string;  // este dato para traer el file
     
     @Column({ type: 'varchar', length: 255 })
     videoname: string;

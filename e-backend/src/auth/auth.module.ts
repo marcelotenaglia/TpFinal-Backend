@@ -26,7 +26,6 @@ import {ConfigModule} from '@nestjs/config';
 })
 export class AuthModule {
   constructor() {
-    console.log('JWT_SECRET:', process.env.JWT_SECRET);
-    console.log('JWT_EXPIRATION:', process.env.JWT_EXPIRATION);
+
   }
 }

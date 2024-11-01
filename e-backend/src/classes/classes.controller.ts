@@ -17,7 +17,7 @@ export class ClassesController {
     @UploadedFile() file: Express.Multer.File, // Captura el archivo
     @Body() createClassDto: CreateClassDto      // Captura los otros campos de texto
   ) {
-    console.log('Datos recibidos:', createClassDto);
+
     const content = file?.filename || ''; // Maneja el nombre del archivo si se recibe
     return this.classesService.create(content,createClassDto ); // Envía a servicio
   }
