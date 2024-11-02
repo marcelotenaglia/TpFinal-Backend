@@ -7,9 +7,9 @@ export class CreateClassDto {
     @MaxLength(100, { message: 'El título no puede exceder los 100 caracteres' })
     title: string;
 
-    @IsString({ message: 'El contenido debe ser una cadena de texto' })
+    /*@IsString({ message: 'El contenido debe ser una cadena de texto' })
     @IsNotEmpty({ message: 'El contenido es obligatorio' })
-    content: string;
+    content: string;*/
 
  
 
