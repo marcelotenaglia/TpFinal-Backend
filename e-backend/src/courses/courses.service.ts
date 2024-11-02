@@ -169,6 +169,38 @@ export class CoursesService {
     }
     return course;
   }
+  async coursesbyInstructor(instructor_id :number):Promise<Course[]>{
+    const courses = await this.courseRepository
+  .createQueryBuilder('course')
+  .leftJoinAndSelect('course.instructor', 'instructor')
+  .leftJoinAndSelect('course.category', 'category')
+  .leftJoinAndSelect('course.courseTopics', 'courseTopics')
+  .leftJoinAndSelect('courseTopics.topic', 'topic')
+  .leftJoinAndSelect('course.classes', 'classes')
+  .leftJoinAndSelect('course.media', 'courseMedia')
+  .select([
+    'course.id',
+    'course.title',
+    'course.description',
+    'course.duration',
+    'course.platform',
+    'course.price',
+    'instructor.name',
+    'category.name',
+    'courseTopics.topic_id',
+    'topic.topic',
+    'classes.title',
+    'courseMedia.filename',
+    'courseMedia.videoUrl',
+  ])
+  .where('instructor.id = :instructor_id', { instructor_id }) // Filtro por el ID del instructor
+  .getMany();
+
+  
+    return courses
+  } 
+
+
 
   async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
     const { instructor_id, category_id, topicIds, ...courseData } =
