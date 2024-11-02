@@ -40,18 +40,25 @@ export class CoursesController {
     return this.coursesService.findOne(id);
   }
 
+  @Get('/instructor/:id')
+  @HttpCode(HttpStatus.OK)
+  //@UseGuards(AuthGuard)
+  async findCoursesByInstructor(@Param('id', ParseIntPipe) id:number):Promise<Course[]>
+  {
+    return this.coursesService.coursesbyInstructor(id);
+  }
 
   @Patch(':id')
   //@UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
-  update(@Param('id',ParseIntPipe) id: number, @Body() updateCourseDto: UpdateCourseDto) {
+  async update(@Param('id',ParseIntPipe) id: number, @Body() updateCourseDto: UpdateCourseDto) {
     return this.coursesService.update(id, updateCourseDto);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id',ParseIntPipe) id: number) {
+  async remove(@Param('id',ParseIntPipe) id: number) {
     return this.coursesService.remove(id);
   }
 }
