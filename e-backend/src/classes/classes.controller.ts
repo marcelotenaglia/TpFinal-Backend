@@ -18,8 +18,8 @@ export class ClassesController {
     @Body() createClassDto: CreateClassDto      // Captura los otros campos de texto
   ) {
 
-    const content = file?.filename || ''; // Maneja el nombre del archivo si se recibe
-    return this.classesService.create(content,createClassDto ); // Envía a servicio
+    const fileurl = file?.filename || 'no se recibio ningun archivo'; // Maneja el nombre del archivo si se recibe
+    return this.classesService.create(fileurl,createClassDto ); // Envía a servicio
   }
 
   @Get()
