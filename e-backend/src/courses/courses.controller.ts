@@ -1,5 +1,5 @@
 
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe,HttpCode,HttpStatus, UseGuards, UseInterceptors, UploadedFile, BadRequestException, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe,HttpCode,HttpStatus, UseGuards, UseInterceptors, UploadedFile, BadRequestException, UploadedFiles, Query } from '@nestjs/common';
 
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -7,6 +7,7 @@ import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course } from './entities/course.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { FileInterceptor } from 'src/interceptor/file.interceptor';
+import { title } from 'process';
 
 //import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -36,10 +37,15 @@ export class CoursesController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async findOne(@Param('id', ParseIntPipe) id: number):Promise<Course> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Course> {
     return this.coursesService.findOne(id);
   }
 
+  @Get('search')
+@HttpCode(HttpStatus.OK)
+async search(@Query('term') term: string): Promise<Course[]> {
+  return this.coursesService.search(term);
+}
 
   @Patch(':id')
   //@UseGuards(AuthGuard)

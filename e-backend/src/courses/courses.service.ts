@@ -106,7 +106,7 @@ export class CoursesService {
     return course;
   }
   async findAll(): Promise<Course[]> {
-    const courses = await this.courseRepository
+    const course = await this.courseRepository
       .createQueryBuilder('course')
       .leftJoinAndSelect('course.instructor', 'instructor')
       .leftJoinAndSelect('course.category', 'category')
@@ -131,8 +131,8 @@ export class CoursesService {
       ])
       .getMany();
     //const courses = await this.courseRepository.find({relations: ['instructor']});
-    if (!courses.length) throw new NotFoundException('No hay cursos');
-    return courses;
+    if (!course.length) throw new NotFoundException('No hay cursos');
+    return course;
   }
 
   async findOne(courseid: number): Promise<Course> {
@@ -168,6 +168,26 @@ export class CoursesService {
       throw new NotFoundException('El curso no fue encontrado');
     }
     return course;
+  }
+
+  async search(term: string): Promise<Course[]> {
+    if (!term) {
+      return []; // Retornar un array vacío si no hay término
+    }
+  
+    const courses = await this.courseRepository
+      .createQueryBuilder('course')
+      .leftJoinAndSelect('course.instructor', 'instructor')
+      .leftJoinAndSelect('course.category', 'category')
+      .where('course.title LIKE :term', { term: `%${term}%` })
+      .orWhere('category.name LIKE :term', { term: `%${term}%` })
+      .getMany();
+  
+    if (!courses.length) {
+      throw new NotFoundException('No se encontraron cursos que coincidan con el término.');
+    }
+    
+    return courses;
   }
 
   async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
