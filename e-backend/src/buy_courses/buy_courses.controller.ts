@@ -1,4 +1,4 @@
-import { Controller, Delete, HttpCode, HttpStatus, Param, Post, UseGuards} from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, UseGuards} from '@nestjs/common';
 import { BuyCoursesService } from './buy_courses.service';
 import { CreateBuyCourseDto } from './dto/create-buy_course.dto';
 import { UpdateBuyCourseDto } from './dto/update-buy_course.dto';
@@ -29,6 +29,13 @@ export class BuyCoursesController {
   )
   {
     return await this.buyCoursesService.returnCourse(user_id,course_id);
+  }
+
+  @Get(':user_id')
+  @HttpCode(HttpStatus.OK)
+  async getBuyCoursesxUser(@Param('user_id')user_id: number,)
+  {
+    return await this.buyCoursesService.getUserBuyCourses(user_id);
   }
 
 }

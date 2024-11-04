@@ -55,6 +55,17 @@ export class BuyCoursesService {
   return true;
 }
 
+async getUserBuyCourses(user_id: number ):Promise<Course[]>
+{
+  const purchase = await this.buyCoursesRepository.find({
+    where: { user: {id: user_id}},
+    relations: ['course', 'course.media'],
+  });
+  const buyCourses = purchase.map(buy => buy.course);
+  
+  return buyCourses;
+}
+
 
 async returnCourse(user_id: number, course_id: number): Promise<boolean> {
   const user = await this.userRepository.findOne({ where: { id: user_id } });
