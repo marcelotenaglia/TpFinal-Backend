@@ -5,6 +5,7 @@ import { User } from "src/users/entities/user.entity";
 import { Favorite } from "src/favorites/entities/favorite.entity";
 import { CourseTopic } from "src/course_topics/entities/course_topic.entity";
 import { Category } from "src/categories/entities/category.entity";
+import { BuyCourse } from "src/buy_courses/entities/buy_course.entity";
 
 @Entity('courses')
 export class Course {
@@ -62,4 +63,7 @@ export class Course {
     @JoinColumn({ name: 'category_id' })
     category: Category;
 
+
+    @OneToMany(() => BuyCourse, (buy_course) => buy_course.course)
+    buyCourse: BuyCourse[];
 }

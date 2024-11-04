@@ -1,34 +1,34 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Delete, HttpCode, HttpStatus, Param, Post, UseGuards} from '@nestjs/common';
 import { BuyCoursesService } from './buy_courses.service';
 import { CreateBuyCourseDto } from './dto/create-buy_course.dto';
 import { UpdateBuyCourseDto } from './dto/update-buy_course.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('buy-courses')
 export class BuyCoursesController {
   constructor(private readonly buyCoursesService: BuyCoursesService) {}
 
-  @Post()
-  create(@Body() createBuyCourseDto: CreateBuyCourseDto) {
-    return this.buyCoursesService.create(createBuyCourseDto);
+
+  @Post(':user_id/:course_id')
+  @HttpCode(HttpStatus.CREATED)
+  //@UseGuards(AuthGuard)
+  async buyCourse(
+    @Param('user_id') user_id: number,
+    @Param('course_id') course_id: number,
+  )
+  {
+    return await this.buyCoursesService.buyCourse(user_id,course_id)
   }
 
-  @Get()
-  findAll() {
-    return this.buyCoursesService.findAll();
+  @Delete(':user_id/:course_id')
+  @HttpCode(HttpStatus.OK)
+  //@UseGuards(AuthGuard)
+  async deleteBuyCourse(
+    @Param('user_id') user_id: number,
+    @Param('course_id') course_id: number,
+  )
+  {
+    return await this.buyCoursesService.returnCourse(user_id,course_id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.buyCoursesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBuyCourseDto: UpdateBuyCourseDto) {
-    return this.buyCoursesService.update(+id, updateBuyCourseDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.buyCoursesService.remove(+id);
-  }
 }
