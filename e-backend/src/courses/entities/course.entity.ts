@@ -6,6 +6,7 @@ import { Favorite } from "src/favorites/entities/favorite.entity";
 import { CourseTopic } from "src/course_topics/entities/course_topic.entity";
 import { Category } from "src/categories/entities/category.entity";
 import { BuyCourse } from "src/buy_courses/entities/buy_course.entity";
+import { Rating } from "src/rating/entities/rating.entity";
 
 @Entity('courses')
 export class Course {
@@ -29,6 +30,9 @@ export class Course {
 
     @Column({type: 'boolean', default: true})
     disable: boolean;
+
+    @Column({ type: 'float', default: 3 }) 
+     rating: number;
     
     /*@Column({ type: 'date' })
     startdate: Date;
@@ -66,4 +70,7 @@ export class Course {
 
     @OneToMany(() => BuyCourse, (buy_course) => buy_course.course)
     buyCourse: BuyCourse[];
+
+    @OneToMany(() => Rating, (rating) => rating.course)
+    ratings: Rating[];
 }
