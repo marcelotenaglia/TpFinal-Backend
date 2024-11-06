@@ -200,6 +200,40 @@ export class CoursesService {
     return courses
   } 
 
+  async search(term: string): Promise<Course[]> {
+    if (!term) {
+      return []; 
+    }
+  
+    try {
+      const courses = await this.courseRepository
+        .createQueryBuilder('course')  // Asegúrate de que el alias sea 'course'
+        .leftJoinAndSelect('course.category', 'category')
+        .leftJoinAndSelect('course.courseTopics', 'courseTopics')
+        .leftJoinAndSelect('courseTopics.topic', 'topic')
+        .select([
+          'course.id',
+          'course.title',
+          'course.description',
+          'course.duration',
+          'course.platform',
+          'course.price',
+          'category.name',
+          'courseTopics.topic_id',
+          'topic.topic',
+        ])
+        .where('course.title LIKE :term', { term: `%${term}%` })
+        .orWhere('category.name LIKE :term', { term: `%${term}%` })
+        .orWhere('topic.topic LIKE :term', { term: `%${term}%` })
+        .getMany();
+  
+      return courses;
+    } catch (error) {
+      console.error("Error en la consulta de búsqueda:", error);
+      throw new Error("Error al buscar cursos");
+    }
+  }
+
 
 
   async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {

@@ -1,5 +1,5 @@
 
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe,HttpCode,HttpStatus, UseGuards, UseInterceptors, UploadedFile, BadRequestException, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe,HttpCode,HttpStatus, UseGuards, UseInterceptors, UploadedFile, BadRequestException, UploadedFiles, Query } from '@nestjs/common';
 
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -46,6 +46,12 @@ export class CoursesController {
   async findCoursesByInstructor(@Param('id', ParseIntPipe) id:number):Promise<Course[]>
   {
     return this.coursesService.coursesbyInstructor(id);
+  }
+
+  @Get('search')
+  @HttpCode(HttpStatus.OK)
+  async searchResults(@Query('term') term: string): Promise <Course[]>{
+    return this.coursesService.search(term);
   }
 
   @Patch(':id')
