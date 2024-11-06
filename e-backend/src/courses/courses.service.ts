@@ -206,8 +206,10 @@ export class CoursesService {
     }
   
     try {
+      const searchTerm = `%${term}%`;
+      console.log(searchTerm)
       const courses = await this.courseRepository
-        .createQueryBuilder('course')  // Asegúrate de que el alias sea 'course'
+        .createQueryBuilder('course')
         .leftJoinAndSelect('course.category', 'category')
         .leftJoinAndSelect('course.courseTopics', 'courseTopics')
         .leftJoinAndSelect('courseTopics.topic', 'topic')
@@ -222,9 +224,9 @@ export class CoursesService {
           'courseTopics.topic_id',
           'topic.topic',
         ])
-        .where('course.title LIKE :term', { term: `%${term}%` })
-        .orWhere('category.name LIKE :term', { term: `%${term}%` })
-        .orWhere('topic.topic LIKE :term', { term: `%${term}%` })
+        .where('course.title LIKE :searchTerm', { searchTerm })
+        .orWhere('category.name LIKE :searchTerm', { searchTerm })
+        .orWhere('topic.topic LIKE :searchTerm', { searchTerm })
         .getMany();
   
       return courses;

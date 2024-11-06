@@ -27,6 +27,12 @@ export class CoursesController {
     return this.coursesService.create(createCourseDto, filename);
   }
 
+  @Get('/search')
+  @HttpCode(HttpStatus.OK)
+  async searchResults(@Query('term') term: string): Promise <Course[]>{
+    return this.coursesService.search(term);
+  }
+
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -48,11 +54,6 @@ export class CoursesController {
     return this.coursesService.coursesbyInstructor(id);
   }
 
-  @Get('search')
-  @HttpCode(HttpStatus.OK)
-  async searchResults(@Query('term') term: string): Promise <Course[]>{
-    return this.coursesService.search(term);
-  }
 
   @Patch(':id')
   //@UseGuards(AuthGuard)
