@@ -15,6 +15,7 @@ import { Topic } from 'src/topics/entities/topic.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Category } from 'src/categories/entities/category.entity';
 import { CourseMedia } from 'src/course_media/entities/course_media.entity';
+
 @Injectable()
 export class CoursesService {
   constructor(
@@ -202,7 +203,7 @@ export class CoursesService {
 
 
 
-  async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
+  /*async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
     const { instructor_id, category_id, topicIds, ...courseData } =
       updateCourseDto;
     const course = await this.courseRepository.findOneByOrFail({ id });
@@ -260,7 +261,7 @@ export class CoursesService {
     }
 
     return course;
-  }
+  }*/
 
   async remove(id: number): Promise<void> {
     const course = await this.courseRepository.findOne({ where: { id } });
@@ -269,4 +270,58 @@ export class CoursesService {
     course.disable = false;
     await this.courseRepository.save(course);
   }
+
+
+  async updateCourse(
+    courseId: number,
+    updateCourseDto: UpdateCourseDto,
+    file: Express.Multer.File
+  ): Promise<Course> {
+    const { instructor_id, videoUrl, ...courseData } = updateCourseDto;
+  
+    // Verificar si el curso existe
+    const course = await this.courseRepository.findOne({
+      where: { id: courseId },
+      relations: ['instructor', 'media'],
+    });
+    if (!course) {
+      throw new NotFoundException('No se encontró el curso');
+    }
+  
+    // Verificar si el instructor existe y tiene permisos
+    const instructor = await this.userRepository.findOne({
+      where: { id: instructor_id },
+      relations: ['role'],
+    });
+    if (!instructor) {
+      throw new NotFoundException('No se encontró el instructor');
+    }
+    if (instructor.role.id !== 2) {
+      throw new ForbiddenException('No tiene permisos para actualizar cursos');
+    }
+  
+    // Actualizar datos básicos del curso
+    Object.assign(course, courseData);
+    await this.courseRepository.save(course);
+  
+    // Verificar que `courseMedia` exista antes de actualizar
+    const courseMedia = course.media;
+    if (!courseMedia) {
+      throw new NotFoundException('No se encontró el archivo de medios del curso');
+    }
+  
+    // Actualizar `courseMedia` si hay cambios
+    if (file) {
+      courseMedia.filename = file.filename;
+    }
+    if (videoUrl) {
+      courseMedia.videoUrl = videoUrl;
+    }
+    await this.courseMediaRepository.save(courseMedia);
+  
+    return course;
+  }
+  
+
+
 }

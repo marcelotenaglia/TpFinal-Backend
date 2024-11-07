@@ -48,12 +48,23 @@ export class CoursesController {
     return this.coursesService.coursesbyInstructor(id);
   }
 
-  @Patch(':id')
+  /*@Patch(':id')
   //@UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   async update(@Param('id',ParseIntPipe) id: number, @Body() updateCourseDto: UpdateCourseDto) {
     return this.coursesService.update(id, updateCourseDto);
-  }
+  }*/
+
+    @Patch(':id')
+@HttpCode(HttpStatus.OK)
+@UseInterceptors(FileInterceptor.createFileInterceptor('file'))
+async update(
+  @Param('id') courseId: number,
+  @UploadedFile() file: Express.Multer.File,
+  @Body() updateCourseDto: UpdateCourseDto
+): Promise<Course> {
+  return this.coursesService.updateCourse(courseId, updateCourseDto, file);
+}
 
   @Delete(':id')
   @UseGuards(AuthGuard)
