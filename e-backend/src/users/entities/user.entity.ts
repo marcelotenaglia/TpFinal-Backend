@@ -1,3 +1,4 @@
+import { BuyCourse } from "src/buy_courses/entities/buy_course.entity";
 import { Course } from "src/courses/entities/course.entity";
 import { Favorite } from "src/favorites/entities/favorite.entity";
 import { Rating } from "src/rating/entities/rating.entity";
@@ -38,5 +39,7 @@ export class User {
     @OneToMany(() => Course, (course) => course.instructor)
     courses: Course[];
     
+    @OneToMany(() => BuyCourse, (buy_course) => buy_course.user)
+    buyCourse: BuyCourse[]; 
 
 }

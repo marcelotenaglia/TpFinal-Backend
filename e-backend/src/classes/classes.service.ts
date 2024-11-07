@@ -17,15 +17,7 @@ export class ClassesService {
   async create(fileurl: string, createClassDto: CreateClassDto): Promise<Class> {
     const { course_id, title, videourl } = createClassDto;
 
-     /* // Convertir los valores a números
-      const courseIdNumber = Number(course_id);
    
-    
-      // Verificar que la conversión sea exitosa
-      if (isNaN(courseIdNumber) ) {
-        throw new BadRequestException('course_id y duration deben ser números válidos.');
-      }*/
-
     const course = await this.courseRepository.findOneBy({ id:course_id });
     if (!course) {
       throw new NotFoundException('El curso con ese ID no existe o no se encontró.');
@@ -41,7 +33,6 @@ export class ClassesService {
     return await this.classesRepository.save(newClass);
 }
   
-
   async findAll(): Promise<Class[]> {
     return await this.classesRepository.find();
   }
@@ -68,13 +59,32 @@ export class ClassesService {
     return classEntity;
   }
 
+  async update(id: number, fileurl: string | null, updateClassDto: UpdateClassDto): Promise<Class> {
+    
+    const existingClass = await this.classesRepository.findOne({ where: { id } });
 
+    if (!existingClass) {
+      throw new NotFoundException('La clase con ese ID no existe o no se encontró.');
+    }
 
-  update(id: number, updateClassDto: UpdateClassDto) {
-    return `This action updates a #${id} class`;
+  // Aquí se actualizan solo los campos que se pasaron en el DTO
+    const updatedClass = {
+      ...existingClass,
+      ...updateClassDto,
+      fileurl: fileurl !== null ? fileurl : existingClass.fileurl // Solo actualiza fileurl si se ha enviado un nuevo archivo
+    };
+
+    return await this.classesRepository.save(updatedClass);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} class`;
+  async delete(id: number): Promise<void> {
+    const classToDelete = await this.classesRepository.findOneBy({ id });
+  
+    if (!classToDelete) {
+      throw new NotFoundException('La clase con ese ID no existe o no se encontró.');
+    }
+  
+    await this.classesRepository.remove(classToDelete);
   }
+  
 }

@@ -6,6 +6,7 @@ import { DatabaseModule } from 'src/database/database.modele';
 import { CoursesModule } from 'src/courses/courses.module';
 import { coursesProviders } from 'src/courses/courses.providers';
 import { userProviders } from 'src/users/users.providers';
+import { ratingProviders } from './rating.providers';
 
 @Module({
   imports:[
@@ -17,6 +18,7 @@ import { userProviders } from 'src/users/users.providers';
   providers: [
     ...coursesProviders,
     ...userProviders,
+    ...ratingProviders,
     RatingService],
 })
 export class RatingModule {}

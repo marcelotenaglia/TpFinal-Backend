@@ -17,7 +17,7 @@ export class FavoritesController {
     @Param('courseId',ParseIntPipe)courseId : number,
   )
   {
-    return this.favoritesService.toggleFavorite(userId,courseId)
+    return await this.favoritesService.toggleFavorite(userId,courseId)
   }
 
   @Get(':userId')
@@ -34,7 +34,7 @@ export class FavoritesController {
       return [];
     }
   
-    return favorites;
+    return await favorites;
   }
 
   

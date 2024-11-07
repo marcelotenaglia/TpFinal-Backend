@@ -11,8 +11,7 @@ import {ConfigModule} from '@nestjs/config';
 @Module({
   imports: [
     DatabaseModule,
-    ConfigModule.forRoot({
-      envFilePath: 'vEntorno.env',  // Asegúrate de que este nombre es correcto
+    ConfigModule.forRoot({  
       isGlobal: true,
     }),
     JwtModule.register({
