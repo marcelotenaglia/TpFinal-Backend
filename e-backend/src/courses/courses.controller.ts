@@ -14,8 +14,6 @@ import { FileInterceptor } from 'src/interceptor/file.interceptor';
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-
-
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
@@ -26,7 +24,6 @@ export class CoursesController {
     const filename = file?.filename || '';
     return this.coursesService.create(createCourseDto, filename);
   }
-
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -48,17 +45,13 @@ export class CoursesController {
     return this.coursesService.coursesbyInstructor(id);
   }
 
-  /*@Patch(':id')
-  //@UseGuards(AuthGuard)
-  @HttpCode(HttpStatus.OK)
-  async update(@Param('id',ParseIntPipe) id: number, @Body() updateCourseDto: UpdateCourseDto) {
-    return this.coursesService.update(id, updateCourseDto);
-  }*/
+
 
     @Patch(':id')
-@HttpCode(HttpStatus.OK)
-@UseInterceptors(FileInterceptor.createFileInterceptor('file'))
-async update(
+  @HttpCode(HttpStatus.OK)
+  //@UseGuards(AuthGuard)
+   @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
+   async update(
   @Param('id') courseId: number,
   @UploadedFile() file: Express.Multer.File,
   @Body() updateCourseDto: UpdateCourseDto
@@ -66,10 +59,15 @@ async update(
   return this.coursesService.updateCourse(courseId, updateCourseDto, file);
 }
 
-  @Delete(':id')
-  @UseGuards(AuthGuard)
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id',ParseIntPipe) id: number) {
-    return this.coursesService.remove(id);
+
+
+  @Patch('/disable/:id') 
+  //@UseGuards(AuthGuard)  
+  //@HttpCode(HttpStatus.NO_CONTENT)
+  async softDeleteCourse(@Param('id') id: number) {
+    return await this.coursesService.softDeleteCourse(id);
   }
+
+
+
 }

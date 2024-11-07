@@ -170,6 +170,7 @@ export class CoursesService {
     }
     return course;
   }
+
   async coursesbyInstructor(instructor_id :number):Promise<Course[]>{
     const courses = await this.courseRepository
   .createQueryBuilder('course')
@@ -195,13 +196,12 @@ export class CoursesService {
     'courseMedia.videoUrl',
   ])
   .where('instructor.id = :instructor_id', { instructor_id }) // Filtro por el ID del instructor
+  .andWhere('course.disable = :disable', { disable: true })
   .getMany();
 
   
     return courses
   } 
-
-
 
   /*async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
     const { instructor_id, category_id, topicIds, ...courseData } =
@@ -271,7 +271,6 @@ export class CoursesService {
     await this.courseRepository.save(course);
   }
 
-
   async updateCourse(
     courseId: number,
     updateCourseDto: UpdateCourseDto,
@@ -322,6 +321,19 @@ export class CoursesService {
     return course;
   }
   
+  async softDeleteCourse(courseId: number): Promise<{ message: string }> {
+    // Verificar si el curso existe
+    const course = await this.courseRepository.findOne({
+      where: { id: courseId }  
+    });
 
+    if (!course) {
+      throw new NotFoundException('No se encontró el curso');
+    }
+
+    await this.courseRepository.update(courseId, { disable: false });
+   
+    return { message: 'Curso deshabilitado con éxito (soft delete)' };
+  } // simulamos que eliminamos el curso pero no!
 
 }
