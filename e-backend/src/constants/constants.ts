@@ -12,6 +12,7 @@ export const constants = {
     favoritesRepository: 'FAVORITES_REPOSITORY',
     ratingRepository: 'RATING_REPOSITORY',
     categoriesRepository: 'CATEGORIES_REPOSITORY',
+    buyCourseRespository: 'BUY_COURSE_REPOSITORY',
 
 
 };

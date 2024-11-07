@@ -1,9 +1,10 @@
 import { Course } from 'src/courses/entities/course.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique } from 'typeorm';
 
 
 @Entity('rating')
+@Unique(['user', 'course'])
 export class Rating {
   @PrimaryGeneratedColumn()
   id: number;
