@@ -214,12 +214,12 @@ export class CoursesService {
   
     try {
       const searchTerm = `%${term}%`;
-      console.log(searchTerm)
       const courses = await this.courseRepository
         .createQueryBuilder('course')
         .leftJoinAndSelect('course.category', 'category')
         .leftJoinAndSelect('course.courseTopics', 'courseTopics')
         .leftJoinAndSelect('courseTopics.topic', 'topic')
+        .leftJoinAndSelect('course.media', 'courseMedia')
         .select([
           'course.id',
           'course.title',
@@ -227,9 +227,11 @@ export class CoursesService {
           'course.duration',
           'course.platform',
           'course.price',
+          'course.rating',
           'category.name',
           'courseTopics.topic_id',
           'topic.topic',
+          'courseMedia.filename',
         ])
         .where('course.title LIKE :searchTerm', { searchTerm })
         .orWhere('category.name LIKE :searchTerm', { searchTerm })
