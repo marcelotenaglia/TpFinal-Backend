@@ -9,7 +9,6 @@ import { FileInterceptor } from 'src/interceptor/download.interceptor';
 export class ClassesController {
   constructor(private readonly classesService: ClassesService) {}
   
-  
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor.createFileInterceptor('file'))  // Espera un archivo con el nombre 'file'
@@ -39,13 +38,22 @@ export class ClassesController {
     return this.classesService.findClassesByCourseId(courseId); // trae las clases asociadas a un curso
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateClassDto: UpdateClassDto) {
-    return this.classesService.update(+id, updateClassDto);
+
+ @Patch(':id') // Método PATCH para actualizar una clase específica
+  @HttpCode(HttpStatus.OK)
+  @UseInterceptors(FileInterceptor.createFileInterceptor('file')) 
+  async update(
+    @Param('id') id: number, 
+    @UploadedFile() file: Express.Multer.File, 
+    @Body() updateClassDto: UpdateClassDto
+  ) {
+    const fileurl = file?.filename || null; // Obtiene el nombre del archivo si se recibe
+    return this.classesService.update(+id, fileurl, updateClassDto); // Envía a servicio
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.classesService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT) 
+  async deleteClass(@Param('id') id: number): Promise<void> {
+    await this.classesService.delete(id);
   }
 }
