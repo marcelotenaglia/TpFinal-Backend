@@ -1,5 +1,5 @@
 
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe,HttpCode,HttpStatus, UseGuards, UseInterceptors, UploadedFile, BadRequestException, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe,HttpCode,HttpStatus, UseGuards, UseInterceptors, UploadedFile, BadRequestException, UploadedFiles, Query } from '@nestjs/common';
 
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -25,6 +25,13 @@ export class CoursesController {
     return this.coursesService.create(createCourseDto, filename);
   }
 
+
+  @Get('/search')
+  @HttpCode(HttpStatus.OK)
+  async searchResults(@Query('term') term: string): Promise <Course[]>{
+    return this.coursesService.search(term);
+  }
+
   @Get()
   @HttpCode(HttpStatus.OK)
   async findAll() {
@@ -47,8 +54,9 @@ export class CoursesController {
 
 
 
-    @Patch(':id')
-  @HttpCode(HttpStatus.OK)
+  @Patch(':id')
+  //@UseGuards(AuthGuard)
+ @HttpCode(HttpStatus.OK)
   //@UseGuards(AuthGuard)
    @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
    async update(
