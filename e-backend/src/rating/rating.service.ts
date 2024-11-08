@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRatingDto } from './dto/create-rating.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
 import { constants } from 'src/constants/constants';
@@ -45,7 +45,7 @@ export class RatingService {
     });
 
     if (verificarRating) {
-      throw new NotFoundException('Este usuario ya ha hecho la calificacion');
+      throw new ConflictException('Este usuario ya ha hecho la calificacion');
     }
     //nueva calificacion
     const newRating = this.ratingRepository.create({
