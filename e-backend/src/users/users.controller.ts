@@ -35,10 +35,9 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete('/:id')
+  @Delete('/:id/deactivate')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('id', ParseIntPipe) id: number):Promise<void> {
-    
-    return this.usersService.remove(id);
+  async removeUser(@Param('id', ParseIntPipe) id:number) : Promise<void> {
+    await this.usersService.remove(id)
   }
 }

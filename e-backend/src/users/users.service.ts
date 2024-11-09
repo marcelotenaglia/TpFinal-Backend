@@ -150,11 +150,13 @@ export class UsersService {
    
   }
   async remove(id: number): Promise<void> {
-    const user = await this.userRepository.findOne({ where: { id } });
-    if (!user)
-      throw new NotFoundException(`No se encontró un usuario con el ID ${id}`);
+    const user = await this.userRepository.findOneBy({id});
+    if (!user) {
+      throw new NotFoundException (`Usuario con ID ${id} no encontrado`);
+    }
+
     user.disable = false;
-    await this.userRepository.save(user);
+    await this.userRepository.save(user)
   }
 
   private calculateAge(birthdate: Date): number {
