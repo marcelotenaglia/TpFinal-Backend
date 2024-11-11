@@ -24,12 +24,12 @@ export class FavoritesService {
   async toggleFavorite(user_id: number, course_id: number): Promise<boolean> {
     const user = await this.userRepository.findOne({ where: { id: user_id } });
     if (!user) {
-      throw new Error('No se encontró un usuario con ese ID');
+      throw new NotFoundException('No se encontró un usuario con ese ID');
     }
 
     const course = await this.courseRepository.findOne({ where: { id: course_id } });
     if (!course) {
-      throw new Error('No se encontró un curso con ese ID');
+      throw new NotFoundException('No se encontró un curso con ese ID');
     }
 
     // Busca si el curso ya es favorito

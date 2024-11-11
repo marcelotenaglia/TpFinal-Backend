@@ -121,6 +121,7 @@ export class CoursesService {
         'course.description',
         'course.duration',
         'course.platform',
+        'course.rating',
         'course.price',
         'instructor.name',
         'category.name',
@@ -152,6 +153,7 @@ export class CoursesService {
         'course.duration',
         'course.platform',
         'course.price',
+        'course.rating',
         'instructor.name',
         'category.name',
         'category.requisitos',
@@ -187,6 +189,7 @@ export class CoursesService {
     'course.duration',
     'course.platform',
     'course.price',
+    'course.rating',
     'instructor.name',
     'category.name',
     'courseTopics.topic_id',
@@ -203,7 +206,50 @@ export class CoursesService {
     return courses
   } 
 
+
+  async search(term: string): Promise<Course[]> {
+    if (!term) {
+      return []; 
+    }
+  
+    try {
+      const searchTerm = `%${term}%`;
+      const courses = await this.courseRepository
+        .createQueryBuilder('course')
+        .leftJoinAndSelect('course.category', 'category')
+        .leftJoinAndSelect('course.courseTopics', 'courseTopics')
+        .leftJoinAndSelect('courseTopics.topic', 'topic')
+        .leftJoinAndSelect('course.media', 'courseMedia')
+        .select([
+          'course.id',
+          'course.title',
+          'course.description',
+          'course.duration',
+          'course.platform',
+          'course.price',
+          'course.rating',
+          'category.name',
+          'courseTopics.topic_id',
+          'topic.topic',
+          'courseMedia.filename',
+        ])
+        .where('course.title LIKE :searchTerm', { searchTerm })
+        .orWhere('category.name LIKE :searchTerm', { searchTerm })
+        .orWhere('topic.topic LIKE :searchTerm', { searchTerm })
+        .getMany();
+  
+      return courses;
+    } catch (error) {
+      console.error("Error en la consulta de búsqueda:", error);
+      throw new NotFoundException("Error al buscar cursos");
+    }
+  }
+
+
+
+ 
   /*async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {
+
     const { instructor_id, category_id, topicIds, ...courseData } =
       updateCourseDto;
     const course = await this.courseRepository.findOneByOrFail({ id });
