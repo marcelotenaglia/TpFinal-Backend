@@ -240,7 +240,6 @@ export class CoursesService {
   
       return courses;
     } catch (error) {
-      console.error("Error en la consulta de búsqueda:", error);
       throw new NotFoundException("Error al buscar cursos");
     }
   }
@@ -276,7 +275,7 @@ export class CoursesService {
 
       return courses;
     } catch (error) {
-      console.error("Error al obtener los cursos por categoría:", error);
+
       throw new NotFoundException("Error al buscar cursos por categoría");
     }
   }

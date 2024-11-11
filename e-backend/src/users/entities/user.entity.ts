@@ -26,6 +26,9 @@ export class User {
     @Column({ type: 'varchar', length: 60 }) 
     password: string;
     
+    @Column({ type: 'date', nullable: true })
+    deactivationDate: Date | null;
+    
     @ManyToOne(() => Role, (role) => role.users)
     @JoinColumn({name: 'role_id'})
     role: Role;
