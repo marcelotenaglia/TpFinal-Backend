@@ -1,5 +1,21 @@
-
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe,HttpCode,HttpStatus, UseGuards, UseInterceptors, UploadedFile, BadRequestException, UploadedFiles, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
+  UploadedFiles,
+  Query,
+} from '@nestjs/common';
 
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -19,16 +35,15 @@ export class CoursesController {
   @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
   async create(
     @UploadedFile() file: Express.Multer.File, // Cambiar a @UploadedFile() para un solo archivo
-    @Body() createCourseDto: CreateCourseDto
+    @Body() createCourseDto: CreateCourseDto,
   ) {
     const filename = file?.filename || '';
     return this.coursesService.create(createCourseDto, filename);
   }
 
-
   @Get('/search')
   @HttpCode(HttpStatus.OK)
-  async searchResults(@Query('term') term: string): Promise <Course[]>{
+  async searchResults(@Query('term') term: string): Promise<Course[]> {
     return this.coursesService.search(term);
   }
 
@@ -40,42 +55,45 @@ export class CoursesController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async findOne(@Param('id', ParseIntPipe) id: number):Promise<Course> {
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Course> {
     return this.coursesService.findOne(id);
   }
 
+  @Get('category/:categoryName')
+  @HttpCode(HttpStatus.OK)
+  async getCoursesByCategory(
+    @Param('categoryName') categoryName: string,
+  ): Promise<Course[]> {
+    return await this.coursesService.findByCategory(categoryName);
+  }
+
+  
   @Get('/instructor/:id')
   @HttpCode(HttpStatus.OK)
   //@UseGuards(AuthGuard)
-  async findCoursesByInstructor(@Param('id', ParseIntPipe) id:number):Promise<Course[]>
-  {
+  async findCoursesByInstructor(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Course[]> {
     return this.coursesService.coursesbyInstructor(id);
   }
 
-
-
   @Patch(':id')
   //@UseGuards(AuthGuard)
- @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.OK)
   //@UseGuards(AuthGuard)
-   @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
-   async update(
-  @Param('id') courseId: number,
-  @UploadedFile() file: Express.Multer.File,
-  @Body() updateCourseDto: UpdateCourseDto
-): Promise<Course> {
-  return this.coursesService.updateCourse(courseId, updateCourseDto, file);
-}
+  @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
+  async update(
+    @Param('id') courseId: number,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() updateCourseDto: UpdateCourseDto,
+  ): Promise<Course> {
+    return this.coursesService.updateCourse(courseId, updateCourseDto, file);
+  }
 
-
-
-  @Patch('/disable/:id') 
-  //@UseGuards(AuthGuard)  
+  @Patch('/disable/:id')
+  //@UseGuards(AuthGuard)
   //@HttpCode(HttpStatus.NO_CONTENT)
   async softDeleteCourse(@Param('id') id: number) {
     return await this.coursesService.softDeleteCourse(id);
   }
-
-
-
 }
