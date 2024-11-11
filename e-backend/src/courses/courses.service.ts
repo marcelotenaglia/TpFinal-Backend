@@ -240,8 +240,43 @@ export class CoursesService {
   
       return courses;
     } catch (error) {
-      console.error("Error en la consulta de búsqueda:", error);
       throw new NotFoundException("Error al buscar cursos");
+    }
+  }
+
+
+  async findByCategory(categoryName: string): Promise<Course[]> {
+    try {
+      const courses = await this.courseRepository
+        .createQueryBuilder('course')
+        .leftJoinAndSelect('course.category', 'category')
+        .leftJoinAndSelect('course.courseTopics', 'courseTopics')
+        .leftJoinAndSelect('courseTopics.topic', 'topic')
+        .leftJoinAndSelect('course.media', 'courseMedia')
+        .select([
+          'course.id',
+          'course.title',
+          'course.description',
+          'course.duration',
+          'course.platform',
+          'course.price',
+          'course.rating',
+          'category.name',
+          'courseTopics.topic_id',
+          'topic.topic',
+          'courseMedia.filename',
+        ])
+        .where('category.name = :categoryName', { categoryName })
+        .getMany();
+
+      if (courses.length === 0) {
+        throw new NotFoundException(`No se encontraron cursos en la categoría: ${categoryName}`);
+      }
+
+      return courses;
+    } catch (error) {
+
+      throw new NotFoundException("Error al buscar cursos por categoría");
     }
   }
 

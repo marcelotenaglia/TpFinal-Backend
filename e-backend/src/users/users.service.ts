@@ -156,6 +156,7 @@ export class UsersService {
     }
 
     user.disable = false;
+    user.deactivationDate = new Date();
     await this.userRepository.save(user)
   }
 

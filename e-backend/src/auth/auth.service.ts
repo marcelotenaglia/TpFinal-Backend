@@ -87,14 +87,14 @@ export class AuthService {
     const user = await this.userRepository.findOne({
       where: { email: loginDto.email },
       relations: ['role'],
-      select: ['id', 'email', 'password', 'disable']
+      select: ['id', 'email', 'password', 'disable','deactivationDate']
     });
     if (!user) {
       throw new UnauthorizedException(`Usuario o contraseña Invalido`);
     }
 
     if (!user.disable) {
-      throw new UnauthorizedException('Tu cuenta ha sido desactivada. Contacta con el soporte.')
+      throw new UnauthorizedException(`Tu cuenta ha sido desactivada el dia ${user.deactivationDate} . Contacta con el soporte.`)
     }
 
     //validar Pass
@@ -114,6 +114,7 @@ export class AuthService {
       email : user.email,
       rol : user.role.id,
     }
+    
 
     return {accest_token : await this.jwtService.signAsync(payload) };
   }
