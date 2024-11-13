@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import * as express from 'express'; // Asegúrate de usar esta línea
 import { join } from 'path';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,6 +24,18 @@ async function bootstrap() {
 
   // Servir archivos estáticos (imágenes)
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
+
+
+  // Configurar el Swagger
+  const config = new DocumentBuilder()
+    .setTitle('API Einstein')
+    .setDescription('Documentación de la API Einstein')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('Docs', app, document);
 
   // Escuchar en el puerto 3000
   await app.listen(3000);
