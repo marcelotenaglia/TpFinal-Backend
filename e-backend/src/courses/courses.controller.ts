@@ -41,6 +41,8 @@ import {
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
+
+  
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiBearerAuth()
@@ -67,6 +69,9 @@ export class CoursesController {
     return this.coursesService.create(createCourseDto, filename);
   }
 
+
+
+
   @Get('/search')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Buscar cursos por término' })
@@ -84,6 +89,8 @@ export class CoursesController {
     return this.coursesService.search(term);
   }
 
+
+
   @Get()
   @ApiOperation({ summary: 'Obtener todos los cursos' })
   @ApiResponse({
@@ -95,6 +102,9 @@ export class CoursesController {
   async findAll() {
     return this.coursesService.findAll();
   }
+
+
+
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
@@ -113,6 +123,8 @@ export class CoursesController {
     return this.coursesService.findOne(id);
   }
 
+
+
   @Get('category/:categoryName')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Obtener cursos por categoría' })
@@ -128,6 +140,9 @@ export class CoursesController {
     return await this.coursesService.findByCategory(categoryName);
   }
 
+
+
+
   @Get('/instructor/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Obtener cursos por ID del instructor' })
@@ -137,12 +152,16 @@ export class CoursesController {
     description: 'Lista de cursos del instructor',
     type: [Course],
   })
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async findCoursesByInstructor(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<Course[]> {
     return this.coursesService.coursesbyInstructor(id);
   }
+
+
+
 
   @Patch(':id')
   @ApiOperation({ summary: 'Actualizar un curso' })
@@ -162,7 +181,8 @@ export class CoursesController {
   })
   @ApiConsumes('multipart/form-data')
   @HttpCode(HttpStatus.OK)
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @UseInterceptors(FileInterceptor.createFileInterceptor('file'))
   async update(
     @Param('id') courseId: number,
@@ -171,6 +191,8 @@ export class CoursesController {
   ): Promise<Course> {
     return this.coursesService.updateCourse(courseId, updateCourseDto, file);
   }
+
+
 
   @Patch('/disable/:id')
   @ApiOperation({ summary: 'Desactivar un curso' })
@@ -184,7 +206,8 @@ export class CoursesController {
     status: HttpStatus.NOT_FOUND,
     description: 'Curso no encontrado',
   })
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   async softDeleteCourse(@Param('id') id: number) {
     return await this.coursesService.softDeleteCourse(id);
