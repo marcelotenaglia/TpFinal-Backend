@@ -115,6 +115,7 @@ export class CoursesService {
       .leftJoinAndSelect('courseTopics.topic', 'topic')
       .leftJoinAndSelect('course.classes', 'classes')
       .leftJoinAndSelect('course.media', 'courseMedia')
+      .where('course.disable = :disable', { disable: true })
       .select([
         'course.id',
         'course.title',
