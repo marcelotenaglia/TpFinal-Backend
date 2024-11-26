@@ -52,10 +52,14 @@ export class FavoritesService {
     }
   }
   async getUserFavorites(user_id: number): Promise<Course[]> {
+
+ 
     const favorites = await this.favoritesRepository.find({
       where: { user: { id: user_id } },
       relations: ['course', 'course.media'],  // Relacionar la tabla de cursos
     });
+
+  
   
     // if (favorites.length === 0) {
     //   throw new NotFoundException('Este usuario no tiene favoritos');
