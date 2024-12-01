@@ -156,6 +156,7 @@ export class CoursesService {
         'course.price',
         'course.rating',
         'instructor.name',
+        'instructor.id',
         'category.name',
         'category.requisitos',
         'category.certificacion',
