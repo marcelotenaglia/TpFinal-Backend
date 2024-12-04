@@ -9,54 +9,49 @@ import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swag
 export class BuyCoursesController {
   constructor(private readonly buyCoursesService: BuyCoursesService) {}
 
-
   @Post(':user_id/:course_id')
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Buy a course for a user' }) // Describe la operación
-  @ApiParam({ name: 'user_id', type: Number, description: 'ID of the user' }) // Parámetro user_id
-  @ApiParam({ name: 'course_id', type: Number, description: 'ID of the course' }) // Parámetro course_id
-  @ApiResponse({ status: 201, description: 'Course purchased successfully', type: Boolean })
-  @ApiResponse({ status: 404, description: 'User or course not found' })
-  @ApiResponse({ status: 409, description: 'User already purchased this course' })
+  @ApiOperation({ summary: 'Comprar un curso para un usuario' }) // Describe la operación
+  @ApiParam({ name: 'user_id', type: Number, description: 'ID del usuario' }) // Parámetro user_id
+  @ApiParam({ name: 'course_id', type: Number, description: 'ID del curso' }) // Parámetro course_id
+  @ApiResponse({ status: 201, description: 'Curso comprado exitosamente', type: Boolean })
+  @ApiResponse({ status: 404, description: 'Usuario o curso no encontrado' })
+  @ApiResponse({ status: 409, description: 'El usuario ya compró este curso' })
   async buyCourse(
     @Param('user_id') user_id: number,
     @Param('course_id') course_id: number,
-  )
-  {
-    return await this.buyCoursesService.buyCourse(user_id,course_id)
+  ) {
+    return await this.buyCoursesService.buyCourse(user_id, course_id);
   }
 
   @Delete(':user_id/:course_id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Return a purchased course within 48 hours' })
-  @ApiParam({ name: 'user_id', type: Number, description: 'ID of the user' })
-  @ApiParam({ name: 'course_id', type: Number, description: 'ID of the course' })
-  @ApiResponse({ status: 200, description: 'Course returned successfully', type: Boolean })
-  @ApiResponse({ status: 404, description: 'User or course not found, or course not purchased by user' })
-  @ApiResponse({ status: 409, description: 'Return period expired (48 hours)' })
+  @ApiOperation({ summary: 'Devolver un curso comprado dentro de las 48 horas' })
+  @ApiParam({ name: 'user_id', type: Number, description: 'ID del usuario' })
+  @ApiParam({ name: 'course_id', type: Number, description: 'ID del curso' })
+  @ApiResponse({ status: 200, description: 'Curso devuelto exitosamente', type: Boolean })
+  @ApiResponse({ status: 404, description: 'Usuario o curso no encontrado, o el curso no fue comprado por el usuario' })
+  @ApiResponse({ status: 409, description: 'El periodo de devolución ha expirado (48 horas)' })
   async deleteBuyCourse(
     @Param('user_id') user_id: number,
     @Param('course_id') course_id: number,
-  )
-  {
-    return await this.buyCoursesService.returnCourse(user_id,course_id);
+  ) {
+    return await this.buyCoursesService.returnCourse(user_id, course_id);
   }
 
   @Get(':user_id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get all courses purchased by a user' })
-  @ApiParam({ name: 'user_id', type: Number, description: 'ID of the user' })
-  @ApiResponse({ status: 200, description: 'List of courses purchased by the user'})
-  @ApiResponse({ status: 404, description: 'No courses found for this user' })
-  async getBuyCoursesxUser(@Param('user_id')user_id: number,)
-  {
+  @ApiOperation({ summary: 'Obtener todos los cursos comprados por un usuario' })
+  @ApiParam({ name: 'user_id', type: Number, description: 'ID del usuario' })
+  @ApiResponse({ status: 200, description: 'Lista de cursos comprados por el usuario' })
+  @ApiResponse({ status: 404, description: 'No se encontraron cursos para este usuario' })
+  async getBuyCoursesxUser(@Param('user_id') user_id: number) {
     return await this.buyCoursesService.getUserBuyCourses(user_id);
   }
-
 }

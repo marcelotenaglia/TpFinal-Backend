@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { RatingService } from './rating.service';
 import { CreateRatingDto } from './dto/create-rating.dto';
-import { UpdateRatingDto } from './dto/update-rating.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 
@@ -13,28 +12,27 @@ export class RatingController {
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Add a rating to a course by a user' })
+  @ApiOperation({ summary: 'Agregar una calificación a un curso por un usuario' })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'The rating has been successfully created.',
+    description: 'La calificación se ha creado exitosamente.',
     schema: {
       example: {
         rating: 4,
-        user: { id: 1, name: 'John Doe' },
-        course: { id: 2, title: 'Introduction to NestJS' },
+        user: { id: 1, name: 'Juan Pérez' },
+        course: { id: 2, title: 'Introducción a NestJS' },
       },
     },
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'User has already rated this course.',
+    description: 'El usuario ya ha calificado este curso.',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'Invalid user or course ID.',
+    description: 'ID de usuario o curso inválido.',
   })
   async createRating(@Body() createRatingDto: CreateRatingDto) {
     return this.ratingService.addRaiting(createRatingDto);
   }
-
 }

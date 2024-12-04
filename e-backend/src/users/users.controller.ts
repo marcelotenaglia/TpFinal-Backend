@@ -12,45 +12,45 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: 'Create a new user' })
+  @ApiOperation({ summary: 'Crear un nuevo usuario' })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'The user has been successfully created.',
+    description: 'El usuario ha sido creado exitosamente.',
     type: User,
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Invalid data or age under 15.',
+    description: 'Datos inválidos o edad menor a 15 años.',
   })
-  async create(@Body() createUserDto: CreateUserDto):Promise<User> {
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.create(createUserDto);
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Get all users' })
+  @ApiOperation({ summary: 'Obtener todos los usuarios' })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Returns a list of users.',
+    description: 'Devuelve una lista de usuarios.',
     type: [User],
   })
-  async findAll():Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Get a single user by ID' })
+  @ApiOperation({ summary: 'Obtener un usuario por su ID' })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Returns a user by ID.',
+    description: 'Devuelve un usuario por su ID.',
     type: User,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'User not found.',
+    description: 'Usuario no encontrado.',
   })
-  findOne(@Param('id',ParseIntPipe) id: number):Promise<User> {
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.usersService.findOne(id);
   }
 
@@ -58,22 +58,21 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Update a user by ID' })
+  @ApiOperation({ summary: 'Actualizar un usuario por su ID' })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'The user has been successfully updated.',
+    description: 'El usuario ha sido actualizado exitosamente.',
     type: User,
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'User not found.',
+    description: 'Usuario no encontrado.',
   })
   @ApiResponse({
     status: HttpStatus.CONFLICT,
-    description: 'Email is already in use.',
+    description: 'El correo electrónico ya está en uso.',
   })
-  async update(@Param('id',ParseIntPipe) id: number,@Body() updateUserDto: UpdateUserDto):Promise<User>
-   {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto): Promise<User> {
     return this.usersService.update(id, updateUserDto);
   }
 
@@ -81,16 +80,17 @@ export class UsersController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Deactivate a user by ID' })
+  @ApiOperation({ summary: 'Desactivar un usuario por su ID' })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
-    description: 'The user has been successfully deactivated.',
+    description: 'El usuario ha sido desactivado exitosamente.',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'User not found.',
+    description: 'Usuario no encontrado.',
   })
-  async removeUser(@Param('id', ParseIntPipe) id:number) : Promise<void> {
-    await this.usersService.remove(id)
+  async removeUser(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    await this.usersService.remove(id);
   }
 }
+

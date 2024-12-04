@@ -1,7 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 
@@ -13,10 +12,10 @@ export class RolesController {
   @HttpCode(HttpStatus.CREATED)
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a new role' })
+  @ApiOperation({ summary: 'Crear un nuevo rol' })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'The role has been successfully created.',
+    description: 'El rol se ha creado exitosamente.',
     schema: {
       example: {
         id: 1,
@@ -30,25 +29,25 @@ export class RolesController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Retrieve all roles with associated users' })
+  @ApiOperation({ summary: 'Obtener todos los roles con los usuarios asociados' })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Returns a list of roles with associated user data.',
+    description: 'Devuelve una lista de roles con la información de los usuarios asociados.',
     schema: {
       example: [
         {
           id: 1,
           name: 'Admin',
           users: [
-            { id: 1, name: 'John Doe', email: 'johndoe@example.com' },
-            { id: 2, name: 'Jane Doe', email: 'janedoe@example.com' },
+            { id: 1, name: 'Juan Pérez', email: 'juanperez@ejemplo.com' },
+            { id: 2, name: 'María López', email: 'marialopez@ejemplo.com' },
           ],
         },
         {
           id: 2,
-          name: 'User',
+          name: 'Usuario',
           users: [
-            { id: 3, name: 'Alice', email: 'alice@example.com' },
+            { id: 3, name: 'Ana Gómez', email: 'anagomez@ejemplo.com' },
           ],
         },
       ],
@@ -57,5 +56,4 @@ export class RolesController {
   async findAll() {
     return this.rolesService.findAll();
   }
-
 }
